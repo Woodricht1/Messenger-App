@@ -34,7 +34,7 @@ ede
 
 ### Send a message to a single receiver
 
-Use case description
+User enters recipient into message form, then types message. Messenger app takes message text, and creates message in inbox of recipient user.
 
 bbrtb
 
