@@ -20,9 +20,9 @@ ede
 
 ### Send a message
 
-Use case description
+#### Use case description
 
-bbrtb
+User enters text (maybe image or video) and sends message
 
 ##### Sequence/communication diagrams
 
