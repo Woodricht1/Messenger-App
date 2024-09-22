@@ -8,7 +8,7 @@
 
 ##### Use case description
 
-bbrtb
+User enters username and password, and the system creates a new account record with the provided information and a unique ID number
 
 ##### Sequence/communication diagrams
 
