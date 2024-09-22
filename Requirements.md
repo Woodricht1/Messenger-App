@@ -18,6 +18,7 @@ berbe
 
 ede
 
+---
 ### Send a message
 
 Use case description
@@ -32,6 +33,7 @@ berbe
 
 ede
 
+---
 ### Send a message to a single receiver
 
 Use case description
@@ -46,6 +48,7 @@ berbe
 
 ede
 
+---
 ### Receive a message
 
 Use case description
