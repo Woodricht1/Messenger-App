@@ -1,0 +1,37 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0" version="24.7.16">
+  <diagram name="Page-1" id="52a04d89-c75d-2922-d76d-85b35f80e030">
+    <mxGraphModel dx="1062" dy="558" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="17472293e6e8944d-30" value="::user" style="whiteSpace=wrap;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" parent="1" vertex="1">
+          <mxGeometry x="40" y="200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lUR-hU0E-zF07QE1Y8Mg-7" value=":createUserDbEntry()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="lUR-hU0E-zF07QE1Y8Mg-8" target="lUR-hU0E-zF07QE1Y8Mg-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="200" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lUR-hU0E-zF07QE1Y8Mg-5" value=":sendLoginNotification()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="lUR-hU0E-zF07QE1Y8Mg-8" target="17472293e6e8944d-30">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="253" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lUR-hU0E-zF07QE1Y8Mg-6" value="DB::UsersDatabase" style="whiteSpace=wrap;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="440" y="40" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lUR-hU0E-zF07QE1Y8Mg-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="lUR-hU0E-zF07QE1Y8Mg-8" target="17472293e6e8944d-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lUR-hU0E-zF07QE1Y8Mg-10" value=":getLoginDetails()" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="lUR-hU0E-zF07QE1Y8Mg-9">
+          <mxGeometry x="0.2458" y="-1" relative="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lUR-hU0E-zF07QE1Y8Mg-8" value="UsersService" style="whiteSpace=wrap;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="440" y="200" width="160" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
