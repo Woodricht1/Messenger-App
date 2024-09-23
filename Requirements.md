@@ -32,7 +32,7 @@ User enters text (maybe image or video) and sends message
 
 ##### Sequence/communication diagrams
 
-berbe
+
 
 ##### Activity/data flow diagrams
 
@@ -44,15 +44,13 @@ ede
 
 User enters recipient into message form, then types message. Messenger app takes message text, and creates message in inbox of recipient user.
 
-bbrtb
-
 ##### Sequence/communication diagrams
 
-berbe
+![SglReceiver Comm.png](assets/CommDiagram.drawio.png)
 
 ##### Activity/data flow diagrams
 
-ede
+![SglReceiver DFD.png](assets/DFD.drawio.png)
 
 ---
 
