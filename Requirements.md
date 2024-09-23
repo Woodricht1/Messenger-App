@@ -8,21 +8,27 @@
 
 ##### Use case description
 
-bbrtb
+User enters username and password, and the system creates a new account record with the provided information and a unique ID number
 
 ##### Sequence/communication diagrams
 
-berbe
+![Login Comm.png](assets/6fdbcd04e722173be6313151d0a9a746e7402b6b.png)
+
+
 
 ##### Activity/data flow diagrams
 
-ede
+![Login Data Flow.drawio.png](assets/249e5f1040a60bf5a182b31e4187cd7d48b5de11.png)
+
+
+
+---
 
 ### Send a message
 
-Use case description
+#### Use case description
 
-bbrtb
+User enters text (maybe image or video) and sends message
 
 ##### Sequence/communication diagrams
 
@@ -31,6 +37,8 @@ berbe
 ##### Activity/data flow diagrams
 
 ede
+
+---
 
 ### Send a message to a single receiver
 
@@ -45,6 +53,8 @@ berbe
 ##### Activity/data flow diagrams
 
 ede
+
+---
 
 ### Receive a message
 
