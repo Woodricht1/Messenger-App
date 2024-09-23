@@ -26,9 +26,7 @@ User enters username and password, and the system creates a new account record w
 
 ### Send a message
 
-Use case description
-
-bbrtb
+User writes a text file that is sent to a user
 
 ##### Sequence/communication diagrams
 
@@ -36,7 +34,7 @@ berbe
 
 ##### Activity/data flow diagrams
 
-ede
+![login Dat Flow.draw.io.png](assets/Send_Message.png)
 
 ---
 
