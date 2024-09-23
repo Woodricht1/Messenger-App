@@ -58,14 +58,14 @@ ede
 
 ### Receive a message
 
-Use case description
-
-bbrtb
+The server sends any messages with the client as the recepient to the user's client.
 
 ##### Sequence/communication diagrams
 
-berbe
+![Receive Message Communication.drawio.png](assets/Receive%20Message%20Communication.drawio.png)
 
 ##### Activity/data flow diagrams
 
-ede
+![Receive Message Dataflow.drawio.png](assets/Receive%20Message%20Dataflow.drawio.png)
+
+
