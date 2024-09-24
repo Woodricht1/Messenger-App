@@ -26,11 +26,13 @@ User enters username and password, and the system creates a new account record w
 
 ### Send a message
 
-User writes a text file that is sent to a user
+#### Use case description
+
+User enters text (maybe image or video) and sends message
 
 ##### Sequence/communication diagrams
 
-berbe
+
 
 ##### Activity/data flow diagrams
 
@@ -40,30 +42,28 @@ berbe
 
 ### Send a message to a single receiver
 
-Use case description
-
-bbrtb
+User enters recipient into message form, then types message. Messenger app takes message text, and creates message in inbox of recipient user.
 
 ##### Sequence/communication diagrams
 
-berbe
+![SglReceiver Comm.png](assets/CommDiagram.drawio.png)
 
 ##### Activity/data flow diagrams
 
-ede
+![SglReceiver DFD.png](assets/DFD.drawio.png)
 
 ---
 
 ### Receive a message
 
-Use case description
-
-bbrtb
+The server sends any messages with the client as the recepient to the user's client.
 
 ##### Sequence/communication diagrams
 
-berbe
+![Receive Message Communication.drawio.png](assets/Receive%20Message%20Communication.drawio.png)
 
 ##### Activity/data flow diagrams
 
-ede
+![Receive Message Dataflow.drawio.png](assets/Receive%20Message%20Dataflow.drawio.png)
+
+
