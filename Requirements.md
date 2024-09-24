@@ -32,7 +32,7 @@ User enters text (maybe image or video) and sends message
 
 ##### Sequence/communication diagrams
 
-
+![Sequence_diagram.png.png](assets/Sequence_diagram.png)
 
 ##### Activity/data flow diagrams
 
