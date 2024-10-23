@@ -1,11 +1,19 @@
 {
-  "name": "messenger-app",
+  "name": "cookieapp",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "UD CPS capstone group 14",
-  "license": "ISC"
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.7",
+    "pug": "^3.0.3"
+  }
 }
