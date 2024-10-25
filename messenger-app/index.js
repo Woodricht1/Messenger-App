@@ -22,12 +22,12 @@ app.use(upload.array())
 app.use(cookieParser())
 app.use(session({secret: "Mellon"}))
 
-const username = "keiserk4"
+const username = "woodricht1"
 const password = "Pgq1JHQRjBWkJE0D"
 const cluster = "clustertruck.pt24s"
-const dbname = ""
+const dbname = "MessangerAppDB"
 
-const uri = `mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${dbname}?retryWrites=true&w=majority&appName=Clustertruck`
+const uri = `mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${dbname}?retryWrites=true&w=majority&appName=MessangerAppDB`
 
 const mongoose = require('mongoose')
 const mongoose_settings = {}
