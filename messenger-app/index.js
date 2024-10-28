@@ -23,8 +23,8 @@ app.use(cookieParser())
 app.use(session({secret: "Mellon"}))
 
 const username = "woodricht1"
-const password = "Pgq1JHQRjBWkJE0D"
-const cluster = "clustertruck.pt24s"
+const password = "NDFW7ozsyYcUIf0i"
+const cluster = "messangerappdb.mudq3"
 const dbname = "MessangerAppDB"
 
 const uri = `mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${dbname}?retryWrites=true&w=majority&appName=MessangerAppDB`
