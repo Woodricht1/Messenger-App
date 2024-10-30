@@ -10,19 +10,19 @@ router.get('/signup', (req, res) => {
 
 //handle signup request
 router.post('/signup', async (req, res) => {
-    if (!req.body.id || !req.body.password) {
-        res.render('signup', {message: "Error: user id or password not entered"})
+    if (!req.body.username || !req.body.password) {
+        res.render('signup', {message: "Error: username or password not entered"})
         return
     }
 
-    const user = await User.findOne({'username': req.body.id}, 'id password')
+    const user = await User.findOne({'username': req.body.username}, 'id password')
     console.log(`Found user: ${user}`)
-    console.log("<Signup> Find: ", req.body.id)
+    console.log("<Signup> Find: ", req.body.username)
     if (user === undefined || user === null) {
         const salt = password.generateSalt();
         const hashedPassword = password.hashPassword(req.body.password, salt);
         var newUser = new User({
-            username: req.body.id,
+            username: req.body.username,
             salt: salt,
             hashedPassword: hashedPassword
         })
@@ -43,15 +43,15 @@ router.get('/login', (req, res) => {
 
 //handle login request
 router.post('/login', async (req, res) => {
-    if(!req.body.id || !req.body.password) {
-        res.render('login', {message: "Error: user id or password not entered"})
+    if(!req.body.username || !req.body.password) {
+        res.render('login', {message: "Error: username or password not entered"})
         return
     }
     //TODO fix this in signup post as well
     //TODO dehash password so the conditional succeeds
-    const user = await User.findOne({'username': req.body.id}, 'username hashedPassword')
+    const user = await User.findOne({'username': req.body.username}, 'username hashedPassword')
     console.log(`Found user: ${user}`)
-    console.log("<Login> Find: ", req.body.id)
+    console.log("<Login> Find: ", req.body.username)
     const salted_input_pass = password.hashPassword(req.body.password, user.salt)
     console.log(` user.salt ${ user.salt}`)
     console.log(`IN: ${salted_input_pass}`)
@@ -87,7 +87,7 @@ const checkSignIn = (req, res, next) => {
 
 //render protected page
 router.get('/protected_page', checkSignIn, (req, res) => {
-    res.render('protected_page', {id: req.session.id})
+    res.render('protected_page', {username: req.session.user.username})
 })
 
 module.exports = router;
