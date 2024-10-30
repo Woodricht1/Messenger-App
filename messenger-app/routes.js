@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./models.js')
+const User = require('./models.js');
+const password = require('./password.js');
 
 router.get('/signup', (req, res) => {
     res.render('signup')
@@ -16,9 +17,12 @@ router.post('/signup', async (req, res) => {
 
     console.log("<Signup> Find: ", req.body.id)
     if (user === undefined || user === null) {
+        const salt = password.generateSalt();
+        const hashedPassword = password.hashPassword(req.body.password, salt);
         var newUser = new User({
-            id: req.body.id,
-            password: req.body.password
+            username: req.body.id,
+            salt: salt,
+            hashedPassword: hashedPassword
         })
         newUser.save()
         req.session.user = newUser
@@ -54,7 +58,7 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-    let user = req.session.user.id
+    let user = req.session.id
     req.session.destroy(() => {
         console.log(`${user} logged out.`)
     })
@@ -72,7 +76,7 @@ const checkSignIn = (req, res, next) => {
 }
 
 router.get('/protected_page', checkSignIn, (req, res) => {
-    res.render('protected_page', {id: req.session.user.id})
+    res.render('protected_page', {id: req.session.id})
 })
 
 module.exports = router;
