@@ -57,10 +57,6 @@ app.use('/', async (req, res, next) => {
 const routes = require('./routes.js')
 app.use('/', routes)
 
-app.use('/protected_page', (err, req, res, next) => {
-    res.redirect('/login')
-})
-
 app.listen(port, () => {
     console.log(`Cookie app listening on port ${port}`);
 })

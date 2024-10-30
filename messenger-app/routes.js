@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('./models.js');
 const password = require('./password.js');
 
+
 //signup page
 router.get('/signup', (req, res) => {
     res.render('signup')
@@ -56,7 +57,7 @@ router.post('/login', async (req, res) => {
     console.log(` user.salt ${ user.salt}`)
     console.log(`IN: ${salted_input_pass}`)
     console.log(`OUT ${user.hashedPassword}`)
-    if (user === undefined || user === null || salted_input_pass != user.hashedPassword) {
+    if (user === undefined || user === null || (salted_input_pass !== user.hashedPassword)) {
         res.render('login', {message: "Invalid credentials"})
         return
     } else {
@@ -84,6 +85,11 @@ const checkSignIn = (req, res, next) => {
         return next(err)
     }
 }
+
+//redirect to login if not signed in
+router.use('/protected_page', (err, req, res, next) => {
+    res.redirect('/login')
+})
 
 //render protected page
 router.get('/protected_page', checkSignIn, (req, res) => {
