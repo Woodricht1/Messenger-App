@@ -16,7 +16,7 @@ router.post('/signup', async (req, res) => {
         return
     }
 
-    const user = await User.findOne({'username': req.body.username}, 'id password')
+    const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
     console.log(`Found user: ${user}`)
     console.log("<Signup> Find: ", req.body.username)
     if (user === undefined || user === null) {
@@ -32,7 +32,7 @@ router.post('/signup', async (req, res) => {
         res.redirect('/protected_page')
         return
     } else {
-        res.render('signup', {message: "Error: an account with this user id already exists."})
+        res.render('signup', {message: "Error: an account with this username already exists."})
         return
     }
 })
@@ -48,7 +48,6 @@ router.post('/login', async (req, res) => {
         res.render('login', {message: "Error: username or password not entered."})
         return
     }
-    //TODO fix this in signup post as well
     const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
     //console.log(`Found user: ${user}`)
     //console.log("<Login> Find: ", req.body.username)
