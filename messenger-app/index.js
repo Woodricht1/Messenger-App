@@ -40,12 +40,12 @@ db.once("open", () => {
 })
 
 app.use('/', async (req, res, next) => {
-    const allUsers = await User.find({}, 'id password')
+    const allUsers = await User.find({}, 'username salt hashedPassword')
     console.log("Registered users:")
     for (const user of allUsers) {
-        console.log(`${user.id}`)
+        console.log(`${user.username}`)
     }
-    currentUser = (req.session.user) ? req.session.user.id : null
+    currentUser = (req.session.user) ? req.session.user.username : null
     if (currentUser) {
         console.log(`Current user: ${currentUser}`)
     } else {

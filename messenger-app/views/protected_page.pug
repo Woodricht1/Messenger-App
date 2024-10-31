@@ -2,7 +2,11 @@ html
     head 
         title Protected page 
     body 
-        div Welcome, #{id}. Use the link below to log out.
+        div Welcome, #{username}. Use the link below to log out.
         div 
             p 
                 a(href="/logout") Log out
+            p 
+                a(href="/edit_username") Change username
+                br
+                a(href="/edit_password") Change password
