@@ -21,6 +21,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(upload.array())
 app.use(cookieParser())
 app.use(session({secret: "Mellon"}))
+app.use(express.static('views/css'));
+app.use(express.static('views/branding'))
 
 const username = "woodricht1"
 const password = "NDFW7ozsyYcUIf0i"
@@ -43,7 +45,7 @@ app.use('/', async (req, res, next) => {
     const allUsers = await User.find({}, 'username salt hashedPassword')
     console.log("Registered users:")
     for (const user of allUsers) {
-        console.log(`${user.username}`)
+        console.log(`username ${user.username}, id ${user._id}`)
     }
     currentUser = (req.session.user) ? req.session.user.username : null
     if (currentUser) {
@@ -56,10 +58,6 @@ app.use('/', async (req, res, next) => {
 
 const routes = require('./routes.js')
 app.use('/', routes)
-
-app.use('/protected_page', (err, req, res, next) => {
-    res.redirect('/login')
-})
 
 app.listen(port, () => {
     console.log(`Cookie app listening on port ${port}`);

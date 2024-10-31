@@ -1,10 +1,14 @@
 html 
     head 
         title Signup
+        link(rel = "icon", type = "image/png", href = "../messengerapplogo.png")
+        link(rel = "stylesheet", type = "text/css", href = "../app.css")
     body 
-        if(message)
-            h4 #{message}
-        form(action = "/signup" method = "POST")
-            input(name = "username" type = "text" required placeholder = "Username")
-            input(name = "password" type = "password" required placeholder = "Password")
-            button(type = "Submit") Sign up
+        image(id="applogotext", src = "../messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
+        div(class = "credentials-block")
+            form(action = "/signup" method = "POST")
+                input(name = "username" type = "text" required placeholder = "Username")
+                input(name = "password" type = "password" required placeholder = "Password")
+                button(type = "Submit") SIGN UP
+            if(message)
+                h4 #{message}
