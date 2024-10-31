@@ -1,8 +1,12 @@
 html 
     head 
-        title Protected page 
+        title Protected page
+        link(rel = "icon", type = "image/png", href = "../messengerapplogo.png")
+        link(rel = "stylesheet", type = "text/css", href = "../app.css")
     body 
-        div Welcome, #{username}. Use the link below to log out.
-        div 
-            p 
-                a(href="/logout") Log out
+        image(id="applogotext", src = "../messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
+        div(class = "credentials-block")
+            div(id = "welcome") Welcome, #{username}.
+            div(id = "welcome") Use the button to log out.
+            form(action = "/logout" method = "GET")
+                button(type = "Submit") LOG OUT

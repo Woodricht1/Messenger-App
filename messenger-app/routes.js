@@ -12,7 +12,7 @@ router.get('/signup', (req, res) => {
 //handle signup request
 router.post('/signup', async (req, res) => {
     if (!req.body.username || !req.body.password) {
-        res.render('signup', {message: "Error: username or password not entered"})
+        res.render('signup', {message: "Error: username or password not entered."})
         return
     }
 
@@ -32,7 +32,7 @@ router.post('/signup', async (req, res) => {
         res.redirect('/protected_page')
         return
     } else {
-        res.render('signup', {message: "Error: an account with this user id already exists"})
+        res.render('signup', {message: "Error: an account with this user id already exists."})
         return
     }
 })
@@ -45,7 +45,7 @@ router.get('/login', (req, res) => {
 //handle login request
 router.post('/login', async (req, res) => {
     if(!req.body.username || !req.body.password) {
-        res.render('login', {message: "Error: username or password not entered"})
+        res.render('login', {message: "Error: username or password not entered."})
         return
     }
     //TODO fix this in signup post as well
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
     //console.log("<Login> Find: ", req.body.username)
     const salted_input_pass = password.hashPassword(req.body.password, user.salt)
     if (user === undefined || user === null || (salted_input_pass !== user.hashedPassword)) {
-        res.render('login', {message: "Invalid credentials"})
+        res.render('login', {message: "Error: Invalid credentials. Please try again."})
         return
     } else {
         req.session.user = user
