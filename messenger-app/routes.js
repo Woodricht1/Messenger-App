@@ -3,24 +3,27 @@ const router = express.Router();
 const User = require('./models.js');
 const password = require('./password.js');
 
+
+//signup page
 router.get('/signup', (req, res) => {
     res.render('signup')
 })
 
+//handle signup request
 router.post('/signup', async (req, res) => {
-    if (!req.body.id || !req.body.password) {
-        res.render('signup', {message: "Error: user id or password not entered"})
+    if (!req.body.username || !req.body.password) {
+        res.render('signup', {message: "Error: username or password not entered"})
         return
     }
 
-    const user = await User.findOne({'id': req.body.id}, 'id password')
-
-    console.log("<Signup> Find: ", req.body.id)
+    const user = await User.findOne({'username': req.body.username}, 'id password')
+    console.log(`Found user: ${user}`)
+    console.log("<Signup> Find: ", req.body.username)
     if (user === undefined || user === null) {
         const salt = password.generateSalt();
         const hashedPassword = password.hashPassword(req.body.password, salt);
         var newUser = new User({
-            username: req.body.id,
+            username: req.body.username,
             salt: salt,
             hashedPassword: hashedPassword
         })
@@ -34,20 +37,23 @@ router.post('/signup', async (req, res) => {
     }
 })
 
+//login page
 router.get('/login', (req, res) => {
     res.render('login')
 })
 
+//handle login request
 router.post('/login', async (req, res) => {
-    if(!req.body.id || !req.body.password) {
-        res.render('login', {message: "Error: user id or password not entered"})
+    if(!req.body.username || !req.body.password) {
+        res.render('login', {message: "Error: username or password not entered"})
         return
     }
-
-    const user = await User.findOne({'id': req.body.id}, 'id password')
-
-    console.log("<Login> Find: ", req.body.id)
-    if (user === undefined || user === null || req.body.password != user.password) {
+    //TODO fix this in signup post as well
+    const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
+    //console.log(`Found user: ${user}`)
+    //console.log("<Login> Find: ", req.body.username)
+    const salted_input_pass = password.hashPassword(req.body.password, user.salt)
+    if (user === undefined || user === null || (salted_input_pass !== user.hashedPassword)) {
         res.render('login', {message: "Invalid credentials"})
         return
     } else {
@@ -55,8 +61,9 @@ router.post('/login', async (req, res) => {
         res.redirect('/protected_page')
         return
     }
-})
+});
 
+//logout page
 router.get('/logout', (req, res) => {
     let user = req.session.id
     req.session.destroy(() => {
@@ -75,8 +82,14 @@ const checkSignIn = (req, res, next) => {
     }
 }
 
+//redirect to login if not signed in
+router.use('/protected_page', (err, req, res, next) => {
+    res.redirect('/login')
+})
+
+//render protected page
 router.get('/protected_page', checkSignIn, (req, res) => {
-    res.render('protected_page', {id: req.session.id})
+    res.render('protected_page', {username: req.session.user.username})
 })
 
 module.exports = router;
