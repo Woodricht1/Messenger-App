@@ -49,14 +49,10 @@ router.post('/login', async (req, res) => {
         return
     }
     //TODO fix this in signup post as well
-    //TODO dehash password so the conditional succeeds
-    const user = await User.findOne({'username': req.body.username}, 'username hashedPassword')
-    console.log(`Found user: ${user}`)
-    console.log("<Login> Find: ", req.body.username)
+    const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
+    //console.log(`Found user: ${user}`)
+    //console.log("<Login> Find: ", req.body.username)
     const salted_input_pass = password.hashPassword(req.body.password, user.salt)
-    console.log(` user.salt ${ user.salt}`)
-    console.log(`IN: ${salted_input_pass}`)
-    console.log(`OUT ${user.hashedPassword}`)
     if (user === undefined || user === null || (salted_input_pass !== user.hashedPassword)) {
         res.render('login', {message: "Invalid credentials"})
         return
