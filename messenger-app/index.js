@@ -21,6 +21,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(upload.array())
 app.use(cookieParser())
 app.use(session({secret: "Mellon"}))
+app.use(express.static('views/css'));
+app.use(express.static('views/branding'))
 
 const username = "woodricht1"
 const password = "NDFW7ozsyYcUIf0i"
