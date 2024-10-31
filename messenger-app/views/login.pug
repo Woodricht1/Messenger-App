@@ -4,11 +4,9 @@ html
         link(rel = "icon", type = "image/png", href = "../messengerapplogo.png")
         link(rel = "stylesheet", type = "text/css", href = "../app.css")
     body 
-        image(id="applogotext", src = "../messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
-        div(class = "credentials-block")
-            form(action = "/login" method = "POST")
-                input(name = "username" type = "text" required placeholder = "Username")
-                input(name = "password" type = "password" required placeholder = "Password")
-                button(type = "Submit") LOG IN
-            if (message)
-                h4 #{message}
+        if (message)
+            h4 #{message}
+        form(action = "/login" method = "POST")
+            input(name = "username" type = "text" required placeholder = "Username")
+            input(name = "password" type = "password" required placeholder = "Password")
+            button(type = "Submit") Log in

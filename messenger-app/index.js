@@ -42,7 +42,7 @@ db.once("open", () => {
 })
 
 app.use('/', async (req, res, next) => {
-    const allUsers = await User.find({}, 'username password')
+    const allUsers = await User.find({}, 'username salt hashedPassword')
     console.log("Registered users:")
     for (const user of allUsers) {
         console.log(`username ${user.username}, id ${user._id}`)

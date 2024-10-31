@@ -71,6 +71,35 @@ router.get('/logout', (req, res) => {
     res.redirect('/login')
 })
 
+router.get('/edit_username', (req, res) => {
+    res.render('edit_username', {username: req.session.user.username});
+});
+
+router.post('/edit_username', async (req, res) => {
+    const filter = { username: req.session.user.username };
+    const update = { username: req.body.username };
+    const newUsername = req.body.username;
+    const updatedUser = await User.findOneAndUpdate(filter, update, { new: true });
+    res.render('protected_page', {username: newUsername})
+})
+
+router.get('/edit_password', (req, res) => {
+    res.render('edit_password', {username: req.session.user.username});
+});
+
+router.post('/edit_password', async (req, res) => {
+    const filter = { username: req.session.user.username };
+    const newPassword = req.body.password;
+    const salt = password.generateSalt();
+    const hashedPassword = password.hashPassword(newPassword, salt);
+    const update = {
+        hashedPassword: hashedPassword,
+        salt: salt
+    };
+    const updatedUser = await User.findOneAndUpdate(filter, update, { new: true });
+    res.redirect('protected_page')
+})
+
 const checkSignIn = (req, res, next) => {
     if(req.session.user) {
         return next()

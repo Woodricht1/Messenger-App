@@ -1,0 +1,10 @@
+html 
+    head
+        title Edit Username 
+    body 
+        div Welcome, #{username}. Set your new username below.
+        div 
+            p 
+                form(action = "/edit_username" method = "POST")
+                    input(name = "username" type = "text" required placeholder = "Username")
+                    button(type = "Submit") Change username
