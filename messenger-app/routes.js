@@ -109,16 +109,12 @@ const checkSignIn = (req, res, next) => {
     if(req.session.user) {
         return next()
     } else {
-        const err = new Error("Not logged in")
-        err.status = 400
-        return next(err)
+        // const err = new Error("Not logged in")
+        // err.status = 400
+        // return next(err)
+        res.redirect('/login');
     }
 }
-
-//redirect to login if not signed in
-router.use('/protected_page', (err, req, res, next) => {
-    res.redirect('/login')
-})
 
 //render protected page
 router.get('/protected_page', checkSignIn, (req, res) => {
