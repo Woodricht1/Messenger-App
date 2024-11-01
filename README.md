@@ -84,7 +84,7 @@ At this stage of the project, there aren't many "design decisions" made, per se.
 
 The Messanger App journey begins at the signup screen. Here, you must enter a username and password. (Usernames must be unique among all users - you will be warned if yours is a duplicate.) 
 
-This will redirect you to the **protected page**. One day, you will be able to send messages here; but for now, you can log out, delete your account, or change your username and password. Note that trying to access the protected page before logging in will redirect you to the login page. 
+This will redirect you to the **protected page**. One day, you will be able to send messages here; but for now, you can log out, delete your account, or change your username and password. Note that trying to access the protected page before logging in will redirect you to the login page. This way, all of the app's existing functionality is accessible in one place.
 
 ---
 
