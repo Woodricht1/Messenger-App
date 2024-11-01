@@ -23,9 +23,11 @@ See [Requirements.md](docs/Requirements.md).
 
 ### User Guide
 
-[TODO link to user guide here]
+
 
 ### Program Flow Diagram
+
+[TODO link to diagram here]
 
 ### External Resources Used
  So far, we have drawn exclusively from the slides shown in class.
