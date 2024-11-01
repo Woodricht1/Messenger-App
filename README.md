@@ -1,3 +1,11 @@
 # Messenger-App
-CPS 490 fall 2024 Messenger App
+---
 
+### Table of Contents
+* About
+* Task Management
+* Implemented Functionality
+* User Guide (link)
+* Program Flow Diagram
+* External Resources Used
+---
