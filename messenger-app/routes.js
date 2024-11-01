@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('./models.js');
 const password = require('./password.js');
-
+const dbname = "MessangerAppDB";
+const { MongoClient } = require('mongodb');
 
 //signup page
 router.get('/signup', (req, res) => {
@@ -120,5 +121,36 @@ const checkSignIn = (req, res, next) => {
 router.get('/protected_page', checkSignIn, (req, res) => {
     res.render('protected_page', {username: req.session.user.username})
 })
+
+
+// Delete Account
+router.post('/drop_user', checkSignIn, async (req, res) => {
+    const usernameToDrop = req.body.username; // Accessing the username from the form submission
+
+    const client = new MongoClient("mongodb+srv://woodricht1:NDFW7ozsyYcUIf0i@messangerappdb.mudq3.mongodb.net/MessangerAppDB?retryWrites=true&w=majority&appName=MessangerAppDB");
+
+    try {
+        await client.connect();
+        const db = client.db(dbname);
+
+        // Delete the user from the users collection
+        const result = await db.collection('users').deleteOne({ username: usernameToDrop });
+
+        if (result.deletedCount === 1) {
+            console.log(`User ${usernameToDrop} dropped successfully.`);
+            res.redirect('/login'); // Redirect after successful deletion
+        } else {
+            console.error(`User ${usernameToDrop} not found.`);
+            res.status(404).send("User not found.");
+        }
+    } catch (error) {
+        console.error("Error dropping user:", error);
+        res.status(500).send("Error dropping user.");
+    } finally {
+        await client.close();
+    }
+});
+
+
 
 module.exports = router;
