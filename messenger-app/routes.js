@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('./models.js');
 const password = require('./password.js');
-
+const dbname = "MessangerAppDB";
+const { MongoClient } = require('mongodb');
 
 //signup page
 router.get('/signup', (req, res) => {
@@ -51,11 +52,16 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
     //console.log(`Found user: ${user}`)
     //console.log("<Login> Find: ", req.body.username)
-    const salted_input_pass = password.hashPassword(req.body.password, user.salt)
-    if (user === undefined || user === null || (salted_input_pass !== user.hashedPassword)) {
+    
+    if (user === undefined || user === null) {
         res.render('login', {message: "Error: Invalid credentials. Please try again."})
         return
     } else {
+        const salted_input_pass = password.hashPassword(req.body.password, user.salt)
+        if (salted_input_pass !== user.hashedPassword) {
+            res.render('login', {message: "Error: Invalid credentials. Please try again."})
+            return
+        }
         req.session.user = user
         res.redirect('/protected_page')
         return
@@ -104,20 +110,47 @@ const checkSignIn = (req, res, next) => {
     if(req.session.user) {
         return next()
     } else {
-        const err = new Error("Not logged in")
-        err.status = 400
-        return next(err)
+        // const err = new Error("Not logged in")
+        // err.status = 400
+        // return next(err)
+        res.redirect('/login');
     }
 }
-
-//redirect to login if not signed in
-router.use('/protected_page', (err, req, res, next) => {
-    res.redirect('/login')
-})
 
 //render protected page
 router.get('/protected_page', checkSignIn, (req, res) => {
     res.render('protected_page', {username: req.session.user.username})
 })
+
+
+// Delete Account
+router.post('/drop_user', checkSignIn, async (req, res) => {
+    const usernameToDrop = req.body.username; // Accessing the username from the form submission
+
+    const client = new MongoClient("mongodb+srv://woodricht1:NDFW7ozsyYcUIf0i@messangerappdb.mudq3.mongodb.net/MessangerAppDB?retryWrites=true&w=majority&appName=MessangerAppDB");
+
+    try {
+        await client.connect();
+        const db = client.db(dbname);
+
+        // Delete the user from the users collection
+        const result = await db.collection('users').deleteOne({ username: usernameToDrop });
+
+        if (result.deletedCount === 1) {
+            console.log(`User ${usernameToDrop} dropped successfully.`);
+            res.redirect('/login'); // Redirect after successful deletion
+        } else {
+            console.error(`User ${usernameToDrop} not found.`);
+            res.status(404).send("User not found.");
+        }
+    } catch (error) {
+        console.error("Error dropping user:", error);
+        res.status(500).send("Error dropping user.");
+    } finally {
+        await client.close();
+    }
+});
+
+
 
 module.exports = router;
