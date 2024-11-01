@@ -51,11 +51,16 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
     //console.log(`Found user: ${user}`)
     //console.log("<Login> Find: ", req.body.username)
-    const salted_input_pass = password.hashPassword(req.body.password, user.salt)
-    if (user === undefined || user === null || (salted_input_pass !== user.hashedPassword)) {
+    
+    if (user === undefined || user === null) {
         res.render('login', {message: "Error: Invalid credentials. Please try again."})
         return
     } else {
+        const salted_input_pass = password.hashPassword(req.body.password, user.salt)
+        if (salted_input_pass !== user.hashedPassword) {
+            res.render('login', {message: "Error: Invalid credentials. Please try again."})
+            return
+        }
         req.session.user = user
         res.redirect('/protected_page')
         return
