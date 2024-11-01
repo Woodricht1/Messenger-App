@@ -90,7 +90,7 @@ This will redirect you to the **protected page**. One day, you will be able to s
 
 ### Program Flow Diagram
 
-[TODO link to diagram here]
+![](assets/ProgramFlow.drawio.png)
 
 ---
 
