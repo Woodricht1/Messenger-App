@@ -12,6 +12,13 @@ const cookieParser = require('cookie-parser')
 const app = express()
 const User = require('./models.js')
 const port = process.env.PORT || 3000
+import express from 'express';
+import { createServer } from 'node:http';
+import { Server } from 'socket.io';
+const server = createServer(app);
+const io = new Server(server);
+
+
 
 app.set('view engine', 'pug')
 app.set('views', './views')
@@ -40,6 +47,14 @@ db.on("error", console.error.bind(console, "connection error: "))
 db.once("open", () => {
     console.log("Connected successfully to MongoDB")
 })
+
+io.on('connection', (socket) => {
+    console.log("A user connected");
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected')
+    });
+});
 
 app.use('/', async (req, res, next) => {
     const allUsers = await User.find({}, 'username salt hashedPassword')

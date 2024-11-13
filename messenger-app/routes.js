@@ -5,6 +5,12 @@ const password = require('./password.js');
 const dbname = "MessangerAppDB";
 const { MongoClient } = require('mongodb');
 
+app.use('/static', express.static('public'));
+
+app.get('/', (req, res) => {
+    res.sendFile(new URL('./login.pug', import.meta.url).pathname);
+});
+
 //signup page
 router.get('/signup', (req, res) => {
     res.render('signup')
