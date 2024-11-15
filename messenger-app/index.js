@@ -12,13 +12,11 @@ const cookieParser = require('cookie-parser')
 const app = express()
 const User = require('./models.js')
 const port = process.env.PORT || 3000
-import express from 'express';
-import { createServer } from 'node:http';
-import { Server } from 'socket.io';
-const server = createServer(app);
-const io = new Server(server);
-const socket = io();
 
+const { createServer } = require('http'); // To create an HTTP server
+const { Server } = require('socket.io'); // Import Server from socket.io
+const httpServer = createServer(app); // Create an HTTP server
+const io = new Server(httpServer); // Pass the HTTP server instance to socket.io
 
 
 app.set('view engine', 'pug')
@@ -49,20 +47,16 @@ db.once("open", () => {
     console.log("Connected successfully to MongoDB")
 })
 
-io.on('connection', (socket) => {
-    console.log("A user connected");
+app.use(express.static('public'));
+app.use(express.static('static'));
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected')
-    });
-});
 
 app.use('/', async (req, res, next) => {
     const allUsers = await User.find({}, 'username salt hashedPassword')
-    console.log("Registered users:")
-    for (const user of allUsers) {
-        console.log(`username ${user.username}, id ${user._id}`)
-    }
+    // console.log("Registered users:")
+    // for (const user of allUsers) {
+    //     console.log(`username ${user.username}, id ${user._id}`)
+    // }
     currentUser = (req.session.user) ? req.session.user.username : null
     if (currentUser) {
         console.log(`Current user: ${currentUser}`)
@@ -72,9 +66,24 @@ app.use('/', async (req, res, next) => {
     next()
 })
 
+io.on('connection', (socket) => {
+    console.log('A user connected'); // This message should appear in the console
+
+    // Listen for 'chat message' from this client
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg); // Broadcast message to all connected clients
+    });
+
+    // Handle client disconnect
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
 const routes = require('./routes.js')
 app.use('/', routes)
 
-app.listen(port, () => {
-    console.log(`Cookie app listening on port ${port}`);
-})
+// Start the server
+httpServer.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
