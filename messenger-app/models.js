@@ -10,14 +10,14 @@ const User = mongoose.model('user', userSchema)
 
 const groupSchema = mongoose.Schema({
     name: String,
-    members: [User]
+    members: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 })
 
 const Group = mongoose.model('group', groupSchema)
 
 const messageSchema = mongoose.Schema({
-    sender: User,
-    recipient: User || Group || [User],
+    sender: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    recipient: {type: mongoose.Schema.Types.ObjectId, ref: 'User'} || {type: mongoose.Schema.Types.ObjectId, ref: 'Group'} || [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     message: String,
     timestamp: Date
 })
