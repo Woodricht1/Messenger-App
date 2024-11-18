@@ -8,4 +8,20 @@ const userSchema = mongoose.Schema({
 
 const User = mongoose.model('user', userSchema)
 
-module.exports = User;
+const groupSchema = mongoose.Schema({
+    name: String,
+    members: [User]
+})
+
+const Group = mongoose.model('group', groupSchema)
+
+const messageSchema = mongoose.Schema({
+    sender: User,
+    recipient: User || Group || [User],
+    message: String,
+    timestamp: Date
+})
+
+const Message = mongoose.model('message', messageSchema)
+
+module.exports = User, Group, Message;
