@@ -3,12 +3,25 @@ const router = express.Router();
 const User = require('./models.js');
 const password = require('./password.js');
 const dbname = "MessangerAppDB";
-const { MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb')
+
+// app.get('/', (req, res) => {
+//     res.sendFile(new URL('./login.pug', import.meta.url).pathname);
+// });
 
 //signup page
 router.get('/signup', (req, res) => {
     res.render('signup')
 })
+
+router.get('/index', (req, res) => {
+    res.render('index')
+})
+
+router.post('/index', (req, res) => {
+    res.send('Form successfully submitted!');
+  });
+  
 
 //handle signup request
 router.post('/signup', async (req, res) => {

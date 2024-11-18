@@ -13,6 +13,13 @@ const app = express()
 const User = require('./models.js')
 const port = process.env.PORT || 3000
 
+const { join } = require('node:path');
+const { createServer } = require('http'); // To create an HTTP server
+const { Server } = require('socket.io'); // Import Server from socket.io
+const server = createServer(app); // Create an HTTP server
+const io = new Server(server); // Pass the HTTP server instance to socket.io
+
+
 app.set('view engine', 'pug')
 app.set('views', './views')
 
@@ -41,24 +48,40 @@ db.once("open", () => {
     console.log("Connected successfully to MongoDB")
 })
 
+app.use('/static', express.static('static'));
+
+
 app.use('/', async (req, res, next) => {
     const allUsers = await User.find({}, 'username salt hashedPassword')
-    console.log("Registered users:")
-    for (const user of allUsers) {
-        console.log(`username ${user.username}, id ${user._id}`)
-    }
+    // console.log("Registered users:")
+    // for (const user of allUsers) {
+    //     console.log(`username ${user.username}, id ${user._id}`)
+    // }
     currentUser = (req.session.user) ? req.session.user.username : null
     if (currentUser) {
         console.log(`Current user: ${currentUser}`)
     } else {
-        console.log("Current user: Not set")
+        //console.log("Current user: Not set")
     }
     next()
 })
 
+io.on('connection', (socket) => {
+    console.log("A user connected"); // This message should appear in the console
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected')
+    });
+
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg)
+    });
+});
+
 const routes = require('./routes.js')
 app.use('/', routes)
 
-app.listen(port, () => {
-    console.log(`Cookie app listening on port ${port}`);
-})
+// Start the server
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
