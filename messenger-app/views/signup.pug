@@ -9,6 +9,7 @@ html
             form(action = "/signup" method = "POST")
                 input(name = "username" type = "text" required placeholder = "Username")
                 input(name = "password" type = "password" required placeholder = "Password")
+                input(name = "email" type = "text" required placeholder = "Email Address")
                 button(type = "Submit") SIGN UP
             if(message)
                 h4 #{message}

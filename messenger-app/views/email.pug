@@ -1,0 +1,14 @@
+html 
+    head 
+        title Email Verification
+        link(rel = "icon", type = "image/png", href = "../messengerapplogo.png")
+        link(rel = "stylesheet", type = "text/css", href = "../app.css")
+    body 
+        image(id="applogotext", src = "../messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
+        div(class = "credentials-block")
+            form(action = "/email" method = "POST")
+                p(style="color: white; text-align: center") Check your email for the verification code sent to your inbox
+                input(name = "token" type = "text" required placeholder = "Email Code")
+                button(type = "Submit") Verify
+            if (message)
+                h4 #{message}

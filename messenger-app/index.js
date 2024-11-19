@@ -67,7 +67,7 @@ app.use('/', async (req, res, next) => {
 })
 
 io.on('connection', (socket) => {
-    console.log("A user connected"); // This message should appear in the console
+    console.log("A user connected");
 
     socket.on('disconnect', () => {
         console.log('user disconnected')
