@@ -83,8 +83,8 @@ router.post('/login', async (req, res) => {
         return
     }
     const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
-    //console.log(`Found user: ${user}`)
-    //console.log("<Login> Find: ", req.body.username)
+    console.log(`Found user: ${user}`)
+    console.log("<Login> Find: ", req.body.username)
     
     if (user === undefined || user === null) {
         res.render('login', {message: "Error: Invalid credentials. Please try again."})
