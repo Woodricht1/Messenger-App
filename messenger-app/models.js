@@ -14,6 +14,7 @@ const User = mongoose.model('user', userSchema)
 const groupSchema = mongoose.Schema({
     name: String,
     members: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+    //research data structue of members
 })
 
 const Group = mongoose.model('group', groupSchema)
