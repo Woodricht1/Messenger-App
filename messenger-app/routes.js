@@ -2,12 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('./models.js');
 const password = require('./password.js');
+const email = require('./email.js');
 const dbname = "MessangerAppDB";
-const { MongoClient } = require('mongodb')
-
-// app.get('/', (req, res) => {
-//     res.sendFile(new URL('./login.pug', import.meta.url).pathname);
-// });
+const { MongoClient, CancellationToken } = require('mongodb')
 
 //signup page
 router.get('/signup', (req, res) => {
@@ -21,6 +18,25 @@ router.get('/index', (req, res) => {
 router.post('/index', (req, res) => {
     res.send('Form successfully submitted!');
   });
+
+router.get('/email', (req, res) => {
+    res.render('email')
+});
+
+router.post('/email', async (req, res) => {
+    token = req.body.token;
+    console.log(token)
+    const user = await User.findOne({verificationToken: token});
+
+    if (!user) {
+        return res.render('email', {message: 'Invalid authentication code'});
+    }
+
+    user.isVerified = true;
+    user.verificationToken = null;
+
+    res.redirect('/protected_page');
+})
   
 
 //handle signup request
@@ -36,14 +52,18 @@ router.post('/signup', async (req, res) => {
     if (user === undefined || user === null) {
         const salt = password.generateSalt();
         const hashedPassword = password.hashPassword(req.body.password, salt);
+        const token = email.generateVerificationToken();
         var newUser = new User({
             username: req.body.username,
             salt: salt,
-            hashedPassword: hashedPassword
+            hashedPassword: hashedPassword,
+            email: req.body.email,
+            verificationToken: token
         })
         newUser.save()
         req.session.user = newUser
-        res.redirect('/protected_page')
+        await email.sendVerificationEmail(req.session.user, token);
+        res.redirect('/email')
         return
     } else {
         res.render('signup', {message: "Error: an account with this username already exists."})
