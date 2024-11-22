@@ -1,0 +1,14 @@
+html 
+    head 
+        title Start Page
+        link(rel = "icon", type = "image/png", href = "../messengerapplogo.png")
+        link(rel = "stylesheet", type = "text/css", href = "../static/css/app.css")
+    body 
+        image(id="applogotext", src = "../static/branding/messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
+        div(class = "credentials-block")
+            form(action = "/signup" method = "GET")
+                button(type = "Submit") SIGN UP
+            form(action = "/login" method = "GET")
+                button(type = "Login") LOGIN
+            if(message)
+                h4 #{message}
