@@ -6,6 +6,14 @@ const email = require('./email.js');
 const dbname = "MessangerAppDB";
 const { MongoClient, CancellationToken } = require('mongodb')
 
+router.get('/', (req,res) => {
+    res.render('start')
+})
+
+router.post('/start', (req, res) => {
+    
+})
+
 //signup page
 router.get('/signup', (req, res) => {
     res.render('signup')
