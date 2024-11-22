@@ -154,11 +154,11 @@ const checkSignIn = (req, res, next) => {
         // const err = new Error("Not logged in")
         // err.status = 400
         // return next(err)
-        res.redirect('/login');
+        res.redirect('/');
     }
 }
 
-//render protected page
+//render app page
 router.get('/app', checkSignIn, (req, res) => {
     res.render('app', {username: req.session.user.username})
 })
