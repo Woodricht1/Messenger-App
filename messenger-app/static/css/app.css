@@ -60,3 +60,13 @@
  a {
      color: rgb(0, 0, 63);
  }
+
+ .container {
+    flex-direction: row; /* Makes the elements sit side by side */
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

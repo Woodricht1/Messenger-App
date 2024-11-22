@@ -43,7 +43,7 @@ router.post('/email', async (req, res) => {
     user.isVerified = true;
     user.verificationToken = null;
 
-    res.redirect('/protected_page');
+    res.redirect('/app');
 })
   
 
@@ -104,7 +104,7 @@ router.post('/login', async (req, res) => {
             return
         }
         req.session.user = user
-        res.redirect('/protected_page')
+        res.redirect('/app')
         return
     }
 });
@@ -127,7 +127,7 @@ router.post('/edit_username', async (req, res) => {
     const update = { username: req.body.username };
     const newUsername = req.body.username;
     const updatedUser = await User.findOneAndUpdate(filter, update, { new: true });
-    res.render('protected_page', {username: newUsername})
+    res.render('app', {username: newUsername})
 })
 
 router.get('/edit_password', (req, res) => {
@@ -144,7 +144,7 @@ router.post('/edit_password', async (req, res) => {
         salt: salt
     };
     const updatedUser = await User.findOneAndUpdate(filter, update, { new: true });
-    res.redirect('protected_page')
+    res.redirect('app')
 })
 
 const checkSignIn = (req, res, next) => {
@@ -159,8 +159,8 @@ const checkSignIn = (req, res, next) => {
 }
 
 //render protected page
-router.get('/protected_page', checkSignIn, (req, res) => {
-    res.render('protected_page', {username: req.session.user.username})
+router.get('/app', checkSignIn, (req, res) => {
+    res.render('app', {username: req.session.user.username})
 })
 
 
