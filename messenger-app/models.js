@@ -13,7 +13,8 @@ const User = mongoose.model('User', userSchema)
 
 const groupSchema = mongoose.Schema({
     name: String,
-    members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] // Ensure ref points to the 'User' model
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Ensure ref points to the 'User' model
+    messages:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }]
 });
 
 const Group = mongoose.model('Group', groupSchema)
