@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('./models.js');
+const Group = require('./models.js');
 const password = require('./password.js');
 const email = require('./email.js');
 const dbname = "MessangerAppDB";
@@ -159,9 +160,16 @@ const checkSignIn = (req, res, next) => {
 }
 
 //render app page
-router.get('/app', checkSignIn, (req, res) => {
-    res.render('app', {username: req.session.user.username})
-})
+router.get('/app', checkSignIn, async (req, res) => {
+    try {
+        const groups = await Group.find();
+        res.render('app', {username: req.session.user.username})
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(`Server error ${err}`);
+    }
+});
+    
 
 
 // Delete Account

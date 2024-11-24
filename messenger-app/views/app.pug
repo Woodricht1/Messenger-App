@@ -19,9 +19,33 @@ html
                                 button(type = "Submit") Change Username    
                             form(action = "/edit_password" method = "GET")
                                 button(type = "Submit") Change Password   
-                div Groups
-                    button(type = "Submit") element1
-                    button(type = "Submit") element2 
+                h1 Groups
+                div#groups-container
+                script.
+                    async function loadGroups() {
+                        try {
+                            // Fetch groups from the backend
+                            const response = await fetch('/groups'); // Update this URL based on your API
+                            const groups = await response.json();
+
+                            const container = document.getElementById('groups-container');
+                            groups.forEach(group => {
+                                // Create a div for each group
+                                const groupDiv = document.createElement('div');
+                                groupDiv.innerHTML = `
+                                    <h2>${group.name}</h2>
+                                    <ul>
+                                        ${group.members.map(member => `<li>${member.name}</li>`).join('')}
+                                    </ul>
+                                `;
+                                container.appendChild(groupDiv);
+                            });
+                        } catch (error) {
+                            console.error('Error loading groups:', error);
+                        }
+                    }
+
+    window.onload = loadGroups;
                     
     script(src="https://cdn.socket.io/4.5.4/socket.io.min.js")
-    script(src="static/js/client.js")
+    script(src="static/js/grouplist.js")
