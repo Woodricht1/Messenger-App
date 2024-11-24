@@ -1,3 +1,4 @@
+doctype html
 html 
     head 
         title Messanger App
@@ -20,33 +21,31 @@ html
                             form(action = "/edit_password" method = "GET")
                                 button(type = "Submit") Change Password   
                 h1 Groups
-                div#groups-container
-                script.
-                    async function loadGroups() {
-                        //TODO all of this should go in grouplist.js!!!!!
-                        try {
-                            // Fetch groups from the backend
-                            const response = await fetch('/groups'); // Update this URL based on your API
-                            const groups = await response.json();
-
-                            const container = document.getElementById('groups-container');
-                            groups.forEach(group => {
-                                // Create a div for each group
-                                const groupDiv = document.createElement('div');
-                                groupDiv.innerHTML = `
-                                    <h2>${group.name}</h2>
-                                    <ul>
-                                        ${group.members.map(member => `<li>${member.name}</li>`).join('')}
-                                    </ul>
-                                `;
-                                container.appendChild(groupDiv);
-                            });
-                        } catch (error) {
-                            console.error('Error loading groups:', error);
+                    div#groups-container
+                    script.
+                        const groups = !{JSON.stringify(groups)};
+                        async function showGroups() {
+                            console.log("ShowGroups:")
+                            //TODO all of this should go in grouplist.js!!!!!
+                            try {
+                                const container = document.getElementById('groups-container');
+                                groups.forEach(group => {
+                                    // Create a div for each group
+                                    const groupDiv = document.createElement('div');
+                                    groupDiv.innerHTML = `
+                                        <h2>${group.name}</h2>
+                                        <ul>
+                                            Members: ${group.members.forEach(member => member.name)}
+                                        </ul>
+                                    `;
+                                    container.appendChild(groupDiv);
+                                });
+                            } catch (error) {
+                                console.error('Error loading groups:', error);
+                            }
                         }
-                    }
 
-    window.onload = loadGroups;
+                        window.onload = showGroups;
                     
     script(src="https://cdn.socket.io/4.5.4/socket.io.min.js")
     script(src="static/js/grouplist.js")
