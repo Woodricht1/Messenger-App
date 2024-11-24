@@ -29,11 +29,9 @@ async function showChat() {
         container.innerHTML=`<h1>${currentGroup.name}</h1>`
         currentGroup.messages.forEach(msg => {
             //TODO need to actually get message info from the message... this will require a DB hit??
-            console.log(msg.message);
+            console.log(`msg.message ${msg.message}`);
             const msgDiv = document.createElement('div');
-            msgDiv.innerHTML = `
-                <h4>${msg.message}</h4>
-            `;
+            msgDiv.innerHTML = `<h4>${msg.message}</h4>`;
             container.appendChild(msgDiv);
         })
     } catch (error) {
