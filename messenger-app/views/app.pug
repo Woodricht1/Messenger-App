@@ -1,4 +1,3 @@
-doctype html
 html 
     head 
         title Messanger App
@@ -33,10 +32,7 @@ html
                                     // Create a div for each group
                                     const groupDiv = document.createElement('div');
                                     groupDiv.innerHTML = `
-                                        <h2>${group.name}</h2>
-                                        <ul>
-                                            Members: ${group.members.forEach(member => member.name)}
-                                        </ul>
+                                        <button>${group.name}</button>
                                     `;
                                     container.appendChild(groupDiv);
                                 });
