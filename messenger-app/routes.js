@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
         return
     }
     const user = await models.User.findOne({'username': req.body.username}, 'username salt hashedPassword')
-    console.log(`Found user: ${user}`)
+    //console.log(`Found user: ${user}`)
     console.log("<Login> Find: ", req.body.username)
     
     if (user === undefined || user === null) {
