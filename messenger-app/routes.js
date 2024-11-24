@@ -200,8 +200,6 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
-const { User, Group } = require('./models'); // Assuming User and Group are imported correctly
-
 router.post('/groups', async (req, res) => {
     const { name, members } = req.body;
 
@@ -215,7 +213,7 @@ router.post('/groups', async (req, res) => {
 
     try {
         // Find users by their usernames
-        const users = await User.find({ username: { $in: memberUsernames } });
+        const users = await models.User.find({ username: { $in: memberUsernames } });
 
         // Check if all users exist
         if (users.length !== memberUsernames.length) {
@@ -226,11 +224,11 @@ router.post('/groups', async (req, res) => {
         const memberIds = users.map(user => user._id);
 
         // Save the group
-        const group = new Group({ name, members: memberIds });
+        const group = new models.Group({ name, members: memberIds });
         await group.save();
 
          // Check if the group was saved successfully
-         const savedGroup = await Group.findById(group._id);  // Fetch the group by its ID
+         const savedGroup = await models.Group.findById(group._id);  // Fetch the group by its ID
 
          if (!savedGroup) {
              return res.status(500).json({ error: 'Group creation failed. Please try again.' });

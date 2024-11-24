@@ -21,10 +21,11 @@ html
                                 button(type = "Submit") Change Password   
                 h1#groups-container Groups
                     div
-                h1 Chat    
-                    div TODO chat needs to go here! 
+                h1#chat-container Chat    
+                    div
     script.
         const groups = !{JSON.stringify(groups)}; // Embed groups data as a global JS variable
+        var currentGroup = !{JSON.stringify(groups[0])}; // Embed groups data as a global JS variable
                     
     script(src="https://cdn.socket.io/4.5.4/socket.io.min.js")
     script(src="static/js/app.js")
