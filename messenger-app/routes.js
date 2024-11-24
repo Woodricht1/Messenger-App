@@ -162,8 +162,9 @@ const checkSignIn = (req, res, next) => {
 router.get('/app', checkSignIn, async (req, res) => {
     try {
         const groups = await models.Group.find();
+        var currentGroup = groups[0];
         console.log(`Found groups: ${groups}`)
-        res.render('app', {username: req.session.user.username, groups: groups})
+        res.render('app', {username: req.session.user.username, groups: groups, currentGroup: currentGroup})
     } catch (err) {
         console.error(err);
         res.status(500).send(`Server error ${err}`);
