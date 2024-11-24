@@ -200,6 +200,49 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
+const { User, Group } = require('./models'); // Assuming User and Group are imported correctly
+
+router.post('/groups', async (req, res) => {
+    const { name, members } = req.body;
+
+    // Validate input
+    if (!name || !members) {
+        return res.status(400).json({ error: 'Group name and members are required.' });
+    }
+
+    // Split members by commas and trim whitespace
+    const memberUsernames = members.split(',').map(username => username.trim());
+
+    try {
+        // Find users by their usernames
+        const users = await User.find({ username: { $in: memberUsernames } });
+
+        // Check if all users exist
+        if (users.length !== memberUsernames.length) {
+            return res.status(400).json({ error: 'Some members do not exist.' });
+        }
+
+        // Get the user IDs (ObjectIds) from the found users
+        const memberIds = users.map(user => user._id);
+
+        // Save the group
+        const group = new Group({ name, members: memberIds });
+        await group.save();
+
+         // Check if the group was saved successfully
+         const savedGroup = await Group.findById(group._id);  // Fetch the group by its ID
+
+         if (!savedGroup) {
+             return res.status(500).json({ error: 'Group creation failed. Please try again.' });
+         }
+ 
+         // Return a success message as JSON
+         return res.status(201).json({ success: `Group "${savedGroup.name}" created successfully.` });
+     } catch (error) {
+         console.error(error);
+         return res.status(500).json({ error: 'Error creating group. Please try again.' });
+     }
+ });
 
 
 module.exports = router;

@@ -19,6 +19,14 @@ html
                                 button(type = "Submit") Change Username    
                             form(action = "/edit_password" method = "GET")
                                 button(type = "Submit") Change Password   
+                            form(action="/groups" method="post")
+                                label(for="name") Group Name:
+                                input(type="text" name="name" placeholder="Enter group name" required)
+                                br
+                                label(for="members") Members (User IDs, comma-separated):
+                                input(type="text" name="members" placeholder="Enter user IDs" required)
+                                br
+                                button(type="submit") Create Group
                 h1 Groups
                 div#groups-container
                 script.

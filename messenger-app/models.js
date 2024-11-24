@@ -23,7 +23,8 @@ const messageSchema = mongoose.Schema({
     recipient: {type: mongoose.Schema.Types.ObjectId, ref: 'User'} || {type: mongoose.Schema.Types.ObjectId, ref: 'Group'} || [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     message: String,
     timestamp: Date
-})
+    
+}) 
 
 const Message = mongoose.model('Message', messageSchema)
 
