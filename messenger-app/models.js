@@ -9,15 +9,14 @@ const userSchema = mongoose.Schema({
     verificationToken: String,
 })
 
-const User = mongoose.model('user', userSchema)
+const User = mongoose.model('User', userSchema)
 
 const groupSchema = mongoose.Schema({
     name: String,
-    members: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
-    //research data structue of members
-})
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] // Ensure ref points to the 'User' model
+});
 
-const Group = mongoose.model('group', groupSchema)
+const Group = mongoose.model('Group', groupSchema)
 
 const messageSchema = mongoose.Schema({
     sender: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
@@ -26,6 +25,6 @@ const messageSchema = mongoose.Schema({
     timestamp: Date
 })
 
-const Message = mongoose.model('message', messageSchema)
+const Message = mongoose.model('Message', messageSchema)
 
-module.exports = User, Group, Message;
+module.exports = {User, Group, Message};

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./models.js');
+const models = require('./models.js');
 const password = require('./password.js');
 const email = require('./email.js');
 const dbname = "MessangerAppDB";
@@ -34,7 +34,7 @@ router.get('/email', (req, res) => {
 router.post('/email', async (req, res) => {
     token = req.body.token;
     console.log(token)
-    const user = await User.findOne({verificationToken: token});
+    const user = await models.User.findOne({verificationToken: token});
 
     if (!user) {
         return res.render('email', {message: 'Invalid authentication code'});
@@ -54,14 +54,14 @@ router.post('/signup', async (req, res) => {
         return
     }
 
-    const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
+    const user = await models.User.findOne({'username': req.body.username}, 'username salt hashedPassword')
     console.log(`Found user: ${user}`)
     console.log("<Signup> Find: ", req.body.username)
     if (user === undefined || user === null) {
         const salt = password.generateSalt();
         const hashedPassword = password.hashPassword(req.body.password, salt);
         const token = email.generateVerificationToken();
-        var newUser = new User({
+        var newUser = new models.User({
             username: req.body.username,
             salt: salt,
             hashedPassword: hashedPassword,
@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
         res.render('login', {message: "Error: username or password not entered."})
         return
     }
-    const user = await User.findOne({'username': req.body.username}, 'username salt hashedPassword')
+    const user = await models.User.findOne({'username': req.body.username}, 'username salt hashedPassword')
     console.log(`Found user: ${user}`)
     console.log("<Login> Find: ", req.body.username)
     
@@ -126,7 +126,7 @@ router.post('/edit_username', async (req, res) => {
     const filter = { username: req.session.user.username };
     const update = { username: req.body.username };
     const newUsername = req.body.username;
-    const updatedUser = await User.findOneAndUpdate(filter, update, { new: true });
+    const updatedUser = await models.User.findOneAndUpdate(filter, update, { new: true });
     res.render('app', {username: newUsername})
 })
 
@@ -143,7 +143,7 @@ router.post('/edit_password', async (req, res) => {
         hashedPassword: hashedPassword,
         salt: salt
     };
-    const updatedUser = await User.findOneAndUpdate(filter, update, { new: true });
+    const updatedUser = await models.User.findOneAndUpdate(filter, update, { new: true });
     res.redirect('app')
 })
 
@@ -159,9 +159,17 @@ const checkSignIn = (req, res, next) => {
 }
 
 //render app page
-router.get('/app', checkSignIn, (req, res) => {
-    res.render('app', {username: req.session.user.username})
-})
+router.get('/app', checkSignIn, async (req, res) => {
+    try {
+        const groups = await models.Group.find();
+        console.log(`Found groups: ${groups}`)
+        res.render('app', {username: req.session.user.username})
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(`Server error ${err}`);
+    }
+});
+    
 
 
 // Delete Account
