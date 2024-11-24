@@ -70,3 +70,7 @@
     align-items: center;
     justify-content: center;
 }
+
+#groups-container {
+    overflow: scroll;
+}

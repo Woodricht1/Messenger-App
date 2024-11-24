@@ -19,8 +19,8 @@ html
                                 button(type = "Submit") Change Username    
                             form(action = "/edit_password" method = "GET")
                                 button(type = "Submit") Change Password   
-                h1 Groups
-                    div#groups-container
+                h1#groups-container Groups
+                    div
                     script.
                         const groups = !{JSON.stringify(groups)};
                         async function showGroups() {
@@ -29,8 +29,10 @@ html
                             try {
                                 const container = document.getElementById('groups-container');
                                 groups.forEach(group => {
+                                    console.log(`group ${group.name} members: ${group.members}`);
                                     // Create a div for each group
                                     const groupDiv = document.createElement('div');
+                                    //TODO this button should do something
                                     groupDiv.innerHTML = `
                                         <button>${group.name}</button>
                                     `;
