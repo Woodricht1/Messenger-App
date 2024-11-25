@@ -161,10 +161,15 @@ const checkSignIn = (req, res, next) => {
 //render app page
 router.get('/app', checkSignIn, async (req, res) => {
     try {
-        const groups = await models.Group.find();
+        const groups = await models.Group.find()
+        .populate({
+            path: 'messages', // Path to populate
+            select: 'message sender timestamp', // Fields to include
+            populate: { path: 'sender', select: 'username' } // populate sender details
+        }).populate('members', 'username'); // Populate members with their names
+
         var currentGroup = groups[0];
-        console.log(`Found groups: ${groups}`)
-        res.render('app', {username: req.session.user.username, groups: groups, currentGroup: currentGroup})
+        res.render('app', {username: req.session.user.username, groups, currentGroup})
     } catch (err) {
         console.error(err);
         res.status(500).send(`Server error ${err}`);

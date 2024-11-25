@@ -19,10 +19,10 @@ html
                                 button(type = "Submit") Change Username    
                             form(action = "/edit_password" method = "GET")
                                 button(type = "Submit") Change Password   
-                h1#groups-container Groups
-                    div
-                h1#chat-container
-                    div
+                div(class = "credentials-block")
+                    h1#groups-container Groups
+                div(class = "credentials-block")
+                    h1#chat-container
     script.
         const groups = !{JSON.stringify(groups)}; // Embed groups data as a global JS variable
         var currentGroup = !{JSON.stringify(currentGroup)}; // Embed groups data as a global JS variable
