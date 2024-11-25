@@ -232,10 +232,6 @@ router.post('/groups', async (req, res) => {
         // Save the group
         await newGroup.save();
 
-         if (!newGroup) {
-             return res.status(500).json({ error: 'Group creation failed. Please try again.' });
-         }
-
          res.redirect('/app')
      } catch (error) {
          console.error(error);
