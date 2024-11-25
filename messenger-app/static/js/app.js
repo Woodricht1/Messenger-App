@@ -1,3 +1,5 @@
+const socket = io();
+
 async function showGroups() {
     //console.log("ShowGroups:")
     try {
@@ -8,9 +10,9 @@ async function showGroups() {
             const groupDiv = document.createElement('div');
             groupDiv.innerHTML = `<button>${group.name}</button>`;
 
-            const button = groupDiv.querySelector('button');
+            const groupButton = groupDiv.querySelector('button');
             
-            button.addEventListener('click', () => {
+            groupButton.addEventListener('click', () => {
                 currentGroup = group; // Update the currentGroup
                 console.log(`Current group set to: ${currentGroup.name}`);
                 showChat();
@@ -47,10 +49,53 @@ async function showChat() {
     }
 }
 
+
+
 function appInit() {
     showGroups();
     showChat();
 }
 
-//TODO add a listener for an update to currentGroup to rerender (if needed)
+
+const messageComposer = document.getElementById("textbox");
+const messageInput = document.getElementById('input');
+
+messageComposer.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const msg = messageInput.value.trim(); // Get the message text
+    if (!msg) return; // Do nothing if the input is empty
+
+    console.log("sender: ", currentUser._id);
+    console.log("recipient: ", currentGroup._id);
+
+    const payload = {
+        message: msg,
+        sender: currentUser._id,
+        recipient: currentGroup._id,
+    };
+
+    console.log('Payload:', payload); // Log the payload
+
+    try {
+        // Send the message to the server
+        const response = await fetch('/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: payload
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to send message: ${response.statusText}`);
+        }
+
+        // Clear the input
+        messageInput.value = '';
+    } catch (error) {
+        console.error('Error sending message:', error);
+    }
+});
+
 window.addEventListener('load', appInit, true);

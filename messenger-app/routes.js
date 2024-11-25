@@ -163,16 +163,37 @@ router.get('/app', checkSignIn, async (req, res) => {
     try {
         const groups = await models.Group.find({ members: req.session.user._id })
         .populate({
-            path: 'messages', // Path to populate
+            path: 'messages', // we want to populate the messages array inside groups
             select: 'message sender timestamp', // Fields to include
             populate: { path: 'sender', select: 'username' } // populate sender details
         }).populate('members', 'username'); // Populate members with their names
 
         var currentGroup = groups[0];
-        res.render('app', {username: req.session.user.username, groups, currentGroup})
+        res.render('app', {username: req.session.user.username, groups, currentGroup, currentUser})
     } catch (err) {
         console.error(err);
         res.status(500).send(`Server error ${err}`);
+    }
+});
+
+
+router.post('/messages', async (req, res) => {
+    try {
+        const { message, sender, recipient } = req.body;
+
+        const newMessage = await models.Message.create({
+            message: message,
+            sender: sender,
+            recipient: recipient,
+            timestamp: new Date()
+        });
+
+        await models.Group.findByIdAndUpdate(groupId, { $push: { messages: newMessage._id } });
+
+        res.status(201).json(newMessage); // Respond with the created message
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to create message' });
     }
 });
     
