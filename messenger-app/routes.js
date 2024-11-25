@@ -206,59 +206,37 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
-router.get('/newconvo', async (req, res) => {
+router.get('/groups', async (req, res) => {
     try {
         const users = await models.User.find();
-        res.render('newconvo', { users });
+        res.render('groups', { users });
     } catch (error) {
         console.error("Error fetching users:", error);
         res.status(500).send("Server error");
     }
 });
 
-router.post('/newconvo', (req, res) => {
-    //grab members from req input
-    //create database record in groups for convo
-    //populate members in record, leave messages field blank
-
-})
-
 router.post('/groups', async (req, res) => {
-    const { name, members } = req.body;
+    const names = req.body.userIds;
 
-    // Validate input
-    if (!name || !members) {
-        return res.status(400).json({ error: 'Group name and members are required.' });
-    }
-
-    // Split members by commas and trim whitespace
-    const memberUsernames = members.split(',').map(username => username.trim());
+    const users = await models.User.find({ '_id': { $in: names } });
+    users.push(req.session.user);
 
     try {
-        // Find users by their usernames
-        const users = await models.User.find({ username: { $in: memberUsernames } });
-
-        // Check if all users exist
-        if (users.length !== memberUsernames.length) {
-            return res.status(400).json({ error: 'Some members do not exist.' });
-        }
-
-        // Get the user IDs (ObjectIds) from the found users
-        const memberIds = users.map(user => user._id);
+        const newGroup = models.Group({
+            name: `${users.map(user => user.username).join(', ')}`, // Example group name based on selected users
+            members: users.map(user => user._id), // Use the user IDs
+            messages: []  // You can initialize this as an empty array for now
+          });
 
         // Save the group
-        const group = new models.Group({ name, members: memberIds });
-        await group.save();
+        await newGroup.save();
 
-         // Check if the group was saved successfully
-         const savedGroup = await models.Group.findById(group._id);  // Fetch the group by its ID
-
-         if (!savedGroup) {
+         if (!newGroup) {
              return res.status(500).json({ error: 'Group creation failed. Please try again.' });
          }
- 
-         // Return a success message as JSON
-         return res.status(201).json({ success: `Group "${savedGroup.name}" created successfully.` });
+
+         res.redirect('/app')
      } catch (error) {
          console.error(error);
          return res.status(500).json({ error: 'Error creating group. Please try again.' });
