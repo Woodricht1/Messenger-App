@@ -33,7 +33,7 @@ async function showChat() {
             container.appendChild(placeholder);
         }
         currentGroup.messages.sort(function(x, y){
-            return y.timestamp - x.timestamp;
+            return new Date(x.timestamp) - new Date(y.timestamp);
         })
         .forEach(msg => {
             //TODO need to actually get message info from the message... this will require a DB hit??
