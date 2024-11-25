@@ -206,6 +206,23 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
+router.get('/newconvo', async (req, res) => {
+    try {
+        const users = await models.User.find();
+        res.render('newconvo', { users });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).send("Server error");
+    }
+});
+
+router.post('/newconvo', (req, res) => {
+    //grab members from req input
+    //create database record in groups for convo
+    //populate members in record, leave messages field blank
+
+})
+
 router.post('/groups', async (req, res) => {
     const { name, members } = req.body;
 
