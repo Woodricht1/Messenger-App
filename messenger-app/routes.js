@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
         return
     }
     const user = await models.User.findOne({'username': req.body.username}, 'username salt hashedPassword')
-    console.log(`Found user: ${user}`)
+    //console.log(`Found user: ${user}`)
     console.log("<Login> Find: ", req.body.username)
     
     if (user === undefined || user === null) {
@@ -161,9 +161,15 @@ const checkSignIn = (req, res, next) => {
 //render app page
 router.get('/app', checkSignIn, async (req, res) => {
     try {
-        const groups = await models.Group.find();
-        console.log(`Found groups: ${groups}`)
-        res.render('app', {username: req.session.user.username})
+        const groups = await models.Group.find({ members: req.session.user._id })
+        .populate({
+            path: 'messages', // Path to populate
+            select: 'message sender timestamp', // Fields to include
+            populate: { path: 'sender', select: 'username' } // populate sender details
+        }).populate('members', 'username'); // Populate members with their names
+
+        var currentGroup = groups[0];
+        res.render('app', {username: req.session.user.username, groups, currentGroup})
     } catch (err) {
         console.error(err);
         res.status(500).send(`Server error ${err}`);
@@ -200,8 +206,6 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
-const { User, Group } = require('./models'); // Assuming User and Group are imported correctly
-
 router.post('/groups', async (req, res) => {
     const { name, members } = req.body;
 
@@ -215,7 +219,7 @@ router.post('/groups', async (req, res) => {
 
     try {
         // Find users by their usernames
-        const users = await User.find({ username: { $in: memberUsernames } });
+        const users = await models.User.find({ username: { $in: memberUsernames } });
 
         // Check if all users exist
         if (users.length !== memberUsernames.length) {
@@ -226,11 +230,11 @@ router.post('/groups', async (req, res) => {
         const memberIds = users.map(user => user._id);
 
         // Save the group
-        const group = new Group({ name, members: memberIds });
+        const group = new models.Group({ name, members: memberIds });
         await group.save();
 
          // Check if the group was saved successfully
-         const savedGroup = await Group.findById(group._id);  // Fetch the group by its ID
+         const savedGroup = await models.Group.findById(group._id);  // Fetch the group by its ID
 
          if (!savedGroup) {
              return res.status(500).json({ error: 'Group creation failed. Please try again.' });
