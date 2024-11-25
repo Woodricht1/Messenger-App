@@ -206,6 +206,12 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
+ //groups page
+router.get('/groups', (req, res) => {
+    res.render('groups')
+})
+
+// Creating and storing Groups
 router.post('/groups', async (req, res) => {
     const { name, members } = req.body;
 
