@@ -1,6 +1,6 @@
 # Messanger App
 
-![title](messenger-app/views/branding/messengerapplogotext.png)
+![title](messenger-app/static/branding/messengerapplogotext.png)
 
 ---
 
