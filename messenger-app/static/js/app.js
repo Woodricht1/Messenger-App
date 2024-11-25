@@ -8,8 +8,8 @@ async function showGroups() {
             const groupDiv = document.createElement('div');
             groupDiv.innerHTML = `<button>${group.name}</button>`;
 
-            // Attach a click event listener to the button
             const button = groupDiv.querySelector('button');
+            
             button.addEventListener('click', () => {
                 currentGroup = group; // Update the currentGroup
                 console.log(`Current group set to: ${currentGroup.name}`);
@@ -36,7 +36,6 @@ async function showChat() {
             return new Date(x.timestamp) - new Date(y.timestamp);
         })
         .forEach(msg => {
-            //TODO need to actually get message info from the message... this will require a DB hit??
             const msgDiv = document.createElement('div');
             msgDiv.innerHTML = `
                 <h5>${msg.message}</h5>

@@ -161,7 +161,7 @@ const checkSignIn = (req, res, next) => {
 //render app page
 router.get('/app', checkSignIn, async (req, res) => {
     try {
-        const groups = await models.Group.find()
+        const groups = await models.Group.find({ members: req.session.user._id })
         .populate({
             path: 'messages', // Path to populate
             select: 'message sender timestamp', // Fields to include
