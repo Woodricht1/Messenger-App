@@ -175,6 +175,10 @@ router.get('/app', checkSignIn, async (req, res) => {
         res.status(500).send(`Server error ${err}`);
     }
 });
+
+router.post('/groups', checkSignIn, async (req, res) => {
+    res.redirect('/groups')
+});
     
 
 
