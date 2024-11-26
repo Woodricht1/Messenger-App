@@ -4,12 +4,17 @@ html
         link(rel = "icon", type = "image/png", href = "../messengerapplogo.png")
         link(rel = "stylesheet", type = "text/css", href = "../static/css/app.css")
     body(white-space = "nowrap")
+        header 
+            image(id="applogotext", class="headerlogo", src = "../static/branding/messengerapplogotext.png", alt = "Messanger App Logo", width=240, height=40)
+            form(action = "/settings" method = "GET")
+                button(class="headerbutton", type = "Submit") Settings
+            form(action = "/logout" method = "GET")
+                button(class="headerbutton", type = "Submit") LOG OUT
         div(class = "container")
             span(class="box")
                 div
-                    image(id="applogotext", src = "../static/branding/messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
                     div(class = "credentials-block")
-                        div(id = "welcome") Welcome, #{username}.
+                        div(id = "welcome") Welcome, #{currentUser.username}.
                             form(action = "/logout" method = "GET")
                                 button(type = "Submit") LOG OUT
                             form(action="/drop_user", method="POST")
@@ -26,9 +31,48 @@ html
                         button(type = "groups") Create New Group   
                 div(class = "credentials-block")
                     h1#chat-container
+                    form#message-writer(action="/app" method="post")
+                        input#message-input(autocomplete="off", type="text", placeholder="Type a message...")
+                        button(type="submit") Send
     script.
-        const groups = !{JSON.stringify(groups)}; // Embed groups data as a global JS variable
-        var currentGroup = !{JSON.stringify(currentGroup)}; // Embed groups data as a global JS variable
-                    
+        const groups = !{JSON.stringify(groups)}; //this makes it available in app.js as a global var
+        var currentGroup = !{JSON.stringify(currentGroup)}; 
+        var currentUser = !{JSON.stringify(currentUser)};
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
+    script.
+        $(document).ready(function () {
+            $('form#message-writer').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            try {
+                const messageText = $('#message-input').val(); // Get input value
+
+            if (messageText) {
+            console.log('Submitting message...', messageText);
+
+            // Submit the form via AJAX
+            $.ajax({
+                type: 'POST',
+                url: '/app',
+                data: {
+                    messageText: messageText,  // Message from input
+                    groupId: currentGroup._id, // Group information
+                },
+                success: function (response) {
+                    console.log('Message submitted successfully:', response);
+                    $('#message-input').val(''); // Clear input field
+                },
+                error: function (error) {
+                    console.error('Error submitting message:', error);
+                }
+            });
+            }
+            } catch (error) {
+                    console.error('Error sending message:', error);
+                }
+            });
+        });
+                            
     script(src="https://cdn.socket.io/4.5.4/socket.io.min.js")
     script(src="static/js/app.js")

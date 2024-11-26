@@ -181,24 +181,6 @@ const checkSignIn = (req, res, next) => {
     }
 }
 
-//render app page
-router.get('/app', checkSignIn, async (req, res) => {
-    try {
-        const groups = await models.Group.find({ members: req.session.user._id })
-        .populate({
-            path: 'messages', // Path to populate
-            select: 'message sender timestamp', // Fields to include
-            populate: { path: 'sender', select: 'username' } // populate sender details
-        }).populate('members', 'username'); // Populate members with their names
-
-        var currentGroup = groups[0];
-        res.render('app', {username: req.session.user.username, groups, currentGroup})
-    } catch (err) {
-        console.error(err);
-        res.status(500).send(`Server error ${err}`);
-    }
-});
-
 // Delete Account
 router.post('/drop_user', checkSignIn, async (req, res) => {
     const usernameToDrop = req.body.username; // Accessing the username from the form submission
@@ -227,7 +209,7 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
-router.get('/groups', async (req, res) => {
+router.get('/groups', checkSignIn, async (req, res) => {
     try {
         const users = await models.User.find();
         res.render('groups', { users });
@@ -237,7 +219,7 @@ router.get('/groups', async (req, res) => {
     }
 });
 
-router.post('/groups', async (req, res) => {
+router.post('/groups', checkSignIn, async (req, res) => {
     const names = req.body.userIds;
     console.log("names: " +names);
 
@@ -252,15 +234,63 @@ router.post('/groups', async (req, res) => {
             messages: []  // You can initialize this as an empty array for now
           });
 
-        // Save the group
         await newGroup.save();
-
-         res.redirect('/app')
+        console.log("new group saved");
+        res.redirect('/app')
      } catch (error) {
          console.error(error);
          return res.status(500).json({ error: 'Error creating group. Please try again.' });
      }
  });
+
+ //render app page
+router.get('/app', checkSignIn, async (req, res) => {
+    try {
+        const groups = await models.Group.find({ members: req.session.user._id })
+        .populate({
+            path: 'messages', // we want to populate the messages array inside groups
+            select: 'message sender timestamp', // Fields to include
+            populate: { path: 'sender', select: 'username' } // populate sender details
+        }).populate('members', 'username'); // Populate members with their names
+
+        var currentGroup = groups[0];
+        res.render('app', {groups, currentGroup, currentUser: req.session.user})
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(`Server error ${err}`);
+    }
+});
+
+//handle new message sends
+router.post('/app', async (req, res) => {
+    try {
+        const {messageText, groupId} = req.body;
+        console.log('received post: ', messageText, "current group ID: ", groupId);
+
+        //send new message to DB
+        const newMsg = models.Message({
+            sender: req.session.user,
+            recipient: groupId,
+            message: messageText,
+            timestamp: new Date()
+        });
+
+        await newMsg.save();
+
+        //add message to array of messages in the group
+        await models.Group.findByIdAndUpdate(
+            groupId,
+            { $push: {messages: newMsg._id}},
+            {new: true}
+        );
+
+        res.status(200).json({ success: true, message: 'Message sent successfully' });
+        console.log('message saved: ', newMsg)
+    } catch (error) {
+        console.error(error);
+         return res.status(500).json({ error: 'Error sending message.' });
+    }
+});
 
 
 module.exports = router;
