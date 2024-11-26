@@ -52,5 +52,18 @@ function appInit() {
     showChat();
 }
 
+async function ensureGlobalChatExists() {
+    try {
+        const globalChat = await models.Group.findOne({ name: "Global Chat" });
+        if (!globalChat) {
+            const newGroup = new models.Group({ name: "Global Chat", members: [] });
+            await newGroup.save();
+            console.log("Global Chat group created.");
+        }
+    } catch (error) {
+        console.error("Error ensuring Global Chat exists:", error);
+    }
+}
+
 //TODO add a listener for an update to currentGroup to rerender (if needed)
 window.addEventListener('load', appInit, true);
