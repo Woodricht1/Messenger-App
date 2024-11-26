@@ -178,23 +178,7 @@ router.get('/app', checkSignIn, async (req, res) => {
 
 
 router.post('/messages', async (req, res) => {
-    try {
-        const { message, sender, recipient } = req.body;
-
-        const newMessage = await models.Message.create({
-            sender: sender,
-            recipient: recipient,
-            message: message,
-            timestamp: new Date()
-        });
-
-        await models.Group.findByIdAndUpdate(groupId, { $push: { messages: newMessage._id } });
-
-        res.status(201).json(newMessage); // Respond with the created message
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to create message' });
-    }
+   
 });
 
 router.post('/groups', checkSignIn, async (req, res) => {
@@ -242,8 +226,27 @@ router.get('/groups', async (req, res) => {
 });
 
 router.post('/groups', async (req, res) => {
-    
-});
+    const names = req.body.userIds;
+
+    const users = await models.User.find({ '_id': { $in: names } });
+    users.push(req.session.user);
+
+    try {
+        const newGroup = models.Group({
+            name: `${users.map(user => user.username).join(', ')}`, // Example group name based on selected users
+            members: users.map(user => user._id), // Use the user IDs
+            messages: []  // You can initialize this as an empty array for now
+          });
+
+        // Save the group
+        await newGroup.save();
+        console.log("new group saved");
+        res.redirect('/app')
+     } catch (error) {
+         console.error(error);
+         return res.status(500).json({ error: 'Error creating group. Please try again.' });
+     }
+ });
 
 
 module.exports = router;
