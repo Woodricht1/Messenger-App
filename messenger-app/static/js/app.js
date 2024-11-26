@@ -58,7 +58,12 @@ async function showChat() {
 
 async function setUpEmojiPicker() {
     document.getElementById('emoji-picker').addEventListener('emoji-click', e => {
-        insertText(document.getElementById('message-input'), e.detail.unicode)
+        //insert emoji into input field at cursor position
+        var cursorPos = $('#message-input').prop('selectionStart');
+        var msg = $('#message-input').val();
+        var textBefore = msg.substring(0, cursorPos);
+        var textAfter  = msg.substring(cursorPos, msg.length);
+        $('#message-input').val(textBefore + e.detail.unicode + textAfter);
     });
 }
 
