@@ -1,16 +1,18 @@
+const socket = io();
+
 async function showGroups() {
     //console.log("ShowGroups:")
     try {
         const container = document.getElementById('groups-container');
         groups.forEach(group => {
             //console.log(`group ${group.name} members: ${group.members}`);
-            // Create a div for each group
+
             const groupDiv = document.createElement('div');
             groupDiv.innerHTML = `<button>${group.name}</button>`;
 
-            const button = groupDiv.querySelector('button');
+            const groupButton = groupDiv.querySelector('button');
             
-            button.addEventListener('click', () => {
+            groupButton.addEventListener('click', () => {
                 currentGroup = group; // Update the currentGroup
                 console.log(`Current group set to: ${currentGroup.name}`);
                 showChat();
@@ -52,5 +54,4 @@ function appInit() {
     showChat();
 }
 
-//TODO add a listener for an update to currentGroup to rerender (if needed)
 window.addEventListener('load', appInit, true);
