@@ -49,9 +49,10 @@ async function showChat() {
     }
 }
 
-function appInit() {
-    showGroups();
-    showChat();
+async function setUpEmojiPicker() {
+    document.getElementById('emoji-picker').addEventListener('emoji-click', e => {
+        insertText(document.getElementById('message-input'), e.detail.unicode)
+    });
 }
 
 async function ensureGlobalChatExists() {
@@ -66,6 +67,13 @@ async function ensureGlobalChatExists() {
         console.error("Error ensuring Global Chat exists:", error);
     }
 }
+
+function appInit() {
+    setUpEmojiPicker();
+    showGroups();
+    showChat();
+}
+
 
 //TODO add a listener for an update to currentGroup to rerender (if needed)
 window.addEventListener('load', appInit, true);
