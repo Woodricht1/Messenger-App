@@ -158,29 +158,6 @@ const checkSignIn = (req, res, next) => {
     }
 }
 
-//render app page
-router.get('/app', checkSignIn, async (req, res) => {
-    try {
-        const groups = await models.Group.find({ members: req.session.user._id })
-        .populate({
-            path: 'messages', // we want to populate the messages array inside groups
-            select: 'message sender timestamp', // Fields to include
-            populate: { path: 'sender', select: 'username' } // populate sender details
-        }).populate('members', 'username'); // Populate members with their names
-
-        var currentGroup = groups[0];
-        res.render('app', {groups, currentGroup, currentUser: req.session.user})
-    } catch (err) {
-        console.error(err);
-        res.status(500).send(`Server error ${err}`);
-    }
-});
-
-
-router.post('/messages', async (req, res) => {
-   
-});
-
 
 // Delete Account
 router.post('/drop_user', checkSignIn, async (req, res) => {
@@ -233,7 +210,6 @@ router.post('/groups', async (req, res) => {
             messages: []  // You can initialize this as an empty array for now
           });
 
-        // Save the group
         await newGroup.save();
         console.log("new group saved");
         res.redirect('/app')
@@ -242,6 +218,29 @@ router.post('/groups', async (req, res) => {
          return res.status(500).json({ error: 'Error creating group. Please try again.' });
      }
  });
+
+ //render app page
+router.get('/app', checkSignIn, async (req, res) => {
+    try {
+        const groups = await models.Group.find({ members: req.session.user._id })
+        .populate({
+            path: 'messages', // we want to populate the messages array inside groups
+            select: 'message sender timestamp', // Fields to include
+            populate: { path: 'sender', select: 'username' } // populate sender details
+        }).populate('members', 'username'); // Populate members with their names
+
+        var currentGroup = groups[0];
+        res.render('app', {groups, currentGroup, currentUser: req.session.user})
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(`Server error ${err}`);
+    }
+});
+
+
+router.post('/app', async (req, res) => {
+   console.log('received post')
+});
 
 
 module.exports = router;
