@@ -169,7 +169,7 @@ router.get('/app', checkSignIn, async (req, res) => {
         }).populate('members', 'username'); // Populate members with their names
 
         var currentGroup = groups[0];
-        res.render('app', {username: req.session.user.username, groups, currentGroup, currentUser})
+        res.render('app', {groups, currentGroup, currentUser: req.session.user})
     } catch (err) {
         console.error(err);
         res.status(500).send(`Server error ${err}`);
@@ -182,9 +182,9 @@ router.post('/messages', async (req, res) => {
         const { message, sender, recipient } = req.body;
 
         const newMessage = await models.Message.create({
-            message: message,
             sender: sender,
             recipient: recipient,
+            message: message,
             timestamp: new Date()
         });
 

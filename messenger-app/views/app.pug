@@ -9,7 +9,7 @@ html
                 div
                     image(id="applogotext", src = "../static/branding/messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
                     div(class = "credentials-block")
-                        div(id = "welcome") Welcome, #{username}.
+                        div(id = "welcome") Welcome, #{currentUser.username}.
                             form(action = "/logout" method = "GET")
                                 button(type = "Submit") LOG OUT
                             form(action="/drop_user", method="POST")

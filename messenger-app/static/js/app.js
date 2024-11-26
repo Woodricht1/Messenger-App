@@ -66,13 +66,16 @@ messageComposer.addEventListener('submit', async (e) => {
     const msg = messageInput.value.trim(); // Get the message text
     if (!msg) return; // Do nothing if the input is empty
 
+
+    //TODO this seems overcomplicated... how do we do this elsewhere?
     console.log("sender: ", currentUser._id);
+    console.log("currentUser: ", currentUser);
     console.log("recipient: ", currentGroup._id);
 
     const payload = {
-        message: msg,
         sender: currentUser._id,
         recipient: currentGroup._id,
+        message: msg,
     };
 
     console.log('Payload:', payload); // Log the payload
@@ -88,7 +91,7 @@ messageComposer.addEventListener('submit', async (e) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to send message: ${response.statusText}`);
+            throw new Error(`Failed to send message`);
         }
 
         // Clear the input
