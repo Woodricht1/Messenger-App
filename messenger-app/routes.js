@@ -242,27 +242,8 @@ router.get('/groups', async (req, res) => {
 });
 
 router.post('/groups', async (req, res) => {
-    const names = req.body.userIds;
-
-    const users = await models.User.find({ '_id': { $in: names } });
-    users.push(req.session.user);
-
-    try {
-        const newGroup = models.Group({
-            name: `${users.map(user => user.username).join(', ')}`, // Example group name based on selected users
-            members: users.map(user => user._id), // Use the user IDs
-            messages: []  // You can initialize this as an empty array for now
-          });
-
-        // Save the group
-        await newGroup.save();
-
-         res.redirect('/app')
-     } catch (error) {
-         console.error(error);
-         return res.status(500).json({ error: 'Error creating group. Please try again.' });
-     }
- });
+    
+});
 
 
 module.exports = router;
