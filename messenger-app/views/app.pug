@@ -12,11 +12,12 @@ html
                 button(class="headerbutton", type = "Submit") LOG OUT
         div(class = "container")
             span(class="box")  
-                div(class = "credentials-block")
-                    h1#groups-container Groups
+                div(class = "group-block")
+                    h1 Conversations
+                    h1#groups-container
                     form(action = "/groups" method = "GET")
-                        button(type = "groups") Create New Group   
-                div(class = "credentials-block")
+                        button(id="newgroupbutton" type = "groups") Create New Group   
+                div(class = "chat-block")
                     h1#chat-container
                     form#message-writer(action="/app" method="post")
                         input#message-input(autocomplete="off", type="text", placeholder="Type a message...")

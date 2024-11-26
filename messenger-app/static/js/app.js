@@ -8,7 +8,7 @@ async function showGroups() {
             //console.log(`group ${group.name} members: ${group.members}`);
 
             const groupDiv = document.createElement('div');
-            groupDiv.innerHTML = `<button>${group.name}</button>`;
+            groupDiv.innerHTML = `<button id="groupbutton">${group.name}</button>`;
 
             const groupButton = groupDiv.querySelector('button');
             
@@ -28,22 +28,29 @@ async function showGroups() {
 async function showChat() {
     try {
         const container = document.getElementById('chat-container');
-        container.innerHTML=`<h1>${currentGroup.name}</h1>`
+        container.innerHTML=`<h1 id="chatheader">${currentGroup.name}</h1>`
+        const subcontainer = document.createElement('div')
+        subcontainer.id = "chat-log"
         if (currentGroup.messages.length < 1) {
             const placeholder = document.createElement('div');
             placeholder.innerHTML = `<h5>no messages yet</h5>`;
-            container.appendChild(placeholder);
+            subcontainer.appendChild(placeholder);
         }
         currentGroup.messages.sort(function(x, y){
             return new Date(x.timestamp) - new Date(y.timestamp);
         })
         .forEach(msg => {
             const msgDiv = document.createElement('div');
+            const timestamp = new Date(msg.timestamp)
             msgDiv.innerHTML = `
-                <h5>${msg.message}</h5>
-                <h6>sent by ${msg.sender.username} at ${msg.timestamp}</h6>`;
-            container.appendChild(msgDiv);
+                <p class="messageinfo">${msg.sender.username} • ${timestamp.toLocaleString("en-US")}</p>
+                <p class="message">${msg.message}</p>`;
+                subcontainer.appendChild(msgDiv);
         })
+        script = document.createElement('script')
+        script.innerHTML = 'var element = document.getElementById("chat-log"); element.scrollTop = element.scrollHeight;'
+        subcontainer.appendChild(script)
+        container.appendChild(subcontainer)
     } catch (error) {
         console.error('Error loading chat:', error);
     }
