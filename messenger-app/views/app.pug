@@ -18,9 +18,12 @@ html
                             form(action = "/edit_username" method = "GET")
                                 button(type = "Submit") Change Username    
                             form(action = "/edit_password" method = "GET")
-                                button(type = "Submit") Change Password   
+                                button(type = "Submit") Change Password 
+                            
                 div(class = "credentials-block")
                     h1#groups-container Groups
+                    form(action = "/groups" method = "GET")
+                        button(type = "groups") Create New Group   
                 div(class = "credentials-block")
                     h1#chat-container
     script.
