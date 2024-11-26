@@ -79,6 +79,11 @@ async function setUpEmojiPicker() {
             picker.style.display = "none";
           }
     });
+
+    //when we submit the message, close emoji picker
+    document.getElementById("message-writer").addEventListener('submit', e => {
+        picker.style.display = "none";
+    });
 }
 
 async function ensureGlobalChatExists() {
