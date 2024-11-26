@@ -1,13 +1,52 @@
-html
-  head
-    title Create Group
-  body
-    h1 Create a New Group
-    form(action="/groups" method="post")
-      label(for="name") Group Name:
-      input(type="text" name="name" required)
-      br
-      label(for="members") Add Members (User IDs, comma-separated):
-      input(type="text" name="members" placeholder="Enter user IDs" required)
-      br
-      button(type="submit") Create Group
+html 
+  head 
+    title New Conversation
+    link(rel="icon", type="image/png", href="../messengerapplogo.png")
+    link(rel="stylesheet", type="text/css", href="../static/css/app.css")
+    style.
+      #selected-users li {
+        color: white; // Set text color to white
+      }
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js") // jQuery for simplicity
+    script.
+      $(document).ready(function() {
+        // Handle change event when a user is selected from the dropdown
+        $('#user-dropdown').on('change', function() {
+          const selectedUserId = $(this).val();
+          const selectedUserName = $('#user-dropdown option:selected').text();
+
+          if (selectedUserId) {
+            // Create a new list item with the selected user's name
+            const listItem = $('<li>').text(selectedUserName)
+              .attr('data-id', selectedUserId); // Store user ID in the list item
+
+            // Append the new list item to the "selected-users" list
+            $('#selected-users').append(listItem);
+
+            // Disable the selected option in the dropdown to prevent re-selection
+            $(`#user-dropdown option[value="${selectedUserId}"]`).prop('disabled', true);
+
+            // Append hidden input to form 
+            const hiddenInput = $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'userIds[]')
+                .attr('value', selectedUserId);
+            $('form').append(hiddenInput);
+            
+            // Reset the dropdown selection
+            $(this).val('');
+          }
+        });
+      });
+  body 
+    image(id="applogotext", src="../static/branding/messengerapplogotext.png", alt="Messanger App Logo", width=480, height=80)
+    div(class="credentials-block")
+      h1 Start a New Conversation
+      form(action="/groups" method="post")
+        div(id="dropdown-container")
+          // Initial dropdown
+          select(name="usernames" id="user-dropdown")
+            each user in users
+              option(value=user._id) #{user.username}
+        button(type="submit") Start Conversation
+        ul(id="selected-users")
