@@ -71,6 +71,17 @@ router.post('/signup', async (req, res) => {
         newUser.save()
         req.session.user = newUser
         await email.sendVerificationEmail(req.session.user, token);
+
+         // Add the new user to the "Global Chat" group
+         const globalGroup = await models.Group.findOne({ name: "Global Chat" });
+         if (globalGroup) {
+             globalGroup.members.push(newUser._id); // Add the user to the group
+             await globalGroup.save(); // Save the updated group
+             console.log(`User ${newUser.username} added to Global Chat.`);
+         } else {
+             console.error("Global Chat group not found.");
+         }
+ 
         res.redirect('/email')
         return
     } else {
@@ -104,6 +115,18 @@ router.post('/login', async (req, res) => {
             return
         }
         req.session.user = user
+        
+          // Ensure user is in the Global Chat group
+    try {
+        const globalChat = await models.Group.findOne({ name: "Global Chat" });
+        if (globalChat && !globalChat.members.includes(user._id)) {
+            globalChat.members.push(user._id); // Add user to members array
+            await globalChat.save(); // Save updated group
+            console.log(`User ${user.username} added to Global Chat.`);
+        }
+    } catch (error) {
+        console.error("Error adding user to Global Chat:", error);
+    }
         res.redirect('/app')
         return
     }
