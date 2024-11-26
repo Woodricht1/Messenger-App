@@ -26,7 +26,7 @@ html
                         button(type = "groups") Create New Group   
                 div(class = "credentials-block")
                     h1#chat-container
-                    form#message-writer
+                    form#message-writer(action="/app" method="post")
                         input#message-input(autocomplete="off", type="text", placeholder="Type a message...")
                         button(type="submit") Send
     script.
@@ -36,32 +36,47 @@ html
 
     script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
     script.
-      $(document).ready(function() {
-        $('form#message-writer').submit(function(e) {
-            e.preventDefault();
+        $(document).ready(function () {
+            $('form#message-writer').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
             try {
+                const messageText = $('#message-input').val(); // Get input value
 
-                messageText = $('#message-input').val();
+                if (messageText) {
+                console.log('Submitting message...', messageText);
 
-                console.log('submitting message...', messageText); 
-
-
-                // Append hidden input to form 
+                // Create and append hidden input to the form
                 const hiddenInput = $('<input>')
                     .attr('type', 'hidden')
-                    .attr('name', 'userIds[]')
-                    .attr('value', "VALUEEF ESKFSKF");
+                    .attr('name', 'messageText')
+                    .attr('value', messageText);
                 $('form#message-writer').append(hiddenInput);
 
-                $('#message-input').val(''); //clear text in input box
+                // Submit the form via AJAX
+                const formData = $(this).serialize(); // Serialize form data
+                $.ajax({
+                    type: 'POST',
+                    url: '/app',
+                    data: formData,
+                    success: function (response) {
+                        console.log('Message submitted successfully:', response);
+                        // Clear the input field for the next message
+                        $('#message-input').val('');
+                    },
+                    error: function (error) {
+                        console.error('Error submitting message:', error);
+                    }
+                });
 
-                return true;
-            } catch (Error) {
-                return false;
+                hiddenInput.remove();
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
             }
+            });
         });
-      });
-                    
+                            
     
     script(src="https://cdn.socket.io/4.5.4/socket.io.min.js")
     script(src="static/js/app.js")

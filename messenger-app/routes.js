@@ -187,7 +187,7 @@ router.post('/drop_user', checkSignIn, async (req, res) => {
     }
 });
 
-router.get('/groups', async (req, res) => {
+router.get('/groups', checkSignIn, async (req, res) => {
     try {
         const users = await models.User.find();
         res.render('groups', { users });
@@ -197,7 +197,7 @@ router.get('/groups', async (req, res) => {
     }
 });
 
-router.post('/groups', async (req, res) => {
+router.post('/groups', checkSignIn, async (req, res) => {
     const names = req.body.userIds;
 
     const users = await models.User.find({ '_id': { $in: names } });
@@ -237,9 +237,15 @@ router.get('/app', checkSignIn, async (req, res) => {
     }
 });
 
-
+//handle new message sends
 router.post('/app', async (req, res) => {
-   console.log('received post')
+    try {
+        const messageText = req.body.messageText;
+    console.log('received post', messageText);
+    } catch (error) {
+        console.error(error);
+         return res.status(500).json({ error: 'Error sending message.' });
+    }
 });
 
 
