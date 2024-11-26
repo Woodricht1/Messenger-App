@@ -66,6 +66,18 @@
      border: 2px solid white;
  }
 
+ emoji-picker {
+    width: 200px;
+    height: 200px;
+    --background:whitesmoke;
+    --border-color: skyblue;
+    --border-size: 4px;
+    --border-radius: 0;
+    --input-border-radius: 0px;
+    --input-border-color: skyblue;
+    --input-placeholder-color: rgb(75,75,75);
+ }
+
   
  h1 {
     color: rgb(0, 0, 63);
