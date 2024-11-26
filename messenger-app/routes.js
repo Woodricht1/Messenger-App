@@ -181,11 +181,6 @@ router.post('/messages', async (req, res) => {
    
 });
 
-router.post('/groups', checkSignIn, async (req, res) => {
-    res.redirect('/groups')
-});
-    
-
 
 // Delete Account
 router.post('/drop_user', checkSignIn, async (req, res) => {
