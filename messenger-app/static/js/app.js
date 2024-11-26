@@ -57,6 +57,10 @@ async function showChat() {
 }
 
 async function setUpEmojiPicker() {
+    //hide emoji picker at first
+    var picker = document.getElementById('emoji-picker');
+    picker.style.display = "none";
+
     document.getElementById('emoji-picker').addEventListener('emoji-click', e => {
         //insert emoji into input field at cursor position
         var cursorPos = $('#message-input').prop('selectionStart');
@@ -64,6 +68,16 @@ async function setUpEmojiPicker() {
         var textBefore = msg.substring(0, cursorPos);
         var textAfter  = msg.substring(cursorPos, msg.length);
         $('#message-input').val(textBefore + e.detail.unicode + textAfter);
+    });
+
+    //show or hide emoji picker when button is clicked
+    document.getElementById("emojibutton").addEventListener('click', e => {
+        e.preventDefault();
+        if (picker.style.display === "none") {
+            picker.style.display = "block";
+          } else {
+            picker.style.display = "none";
+          }
     });
 }
 

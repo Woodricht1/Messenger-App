@@ -21,8 +21,10 @@ html
                     h1#chat-container
                     form#message-writer(action="/app" method="post")
                         input#message-input(autocomplete="off", type="text", placeholder="Type a message...")
+                        div#message-buttons
+                            button(type="submit") Send
+                            button#emojibutton Emoji
                         emoji-picker#emoji-picker(class="light")
-                        button(type="submit") Send
     script.
         const groups = !{JSON.stringify(groups)}; //this makes it available in app.js as a global var
         var currentGroup = !{JSON.stringify(currentGroup)}; 
