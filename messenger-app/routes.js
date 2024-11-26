@@ -176,12 +176,6 @@ router.get('/app', checkSignIn, async (req, res) => {
     }
 });
 
-router.post('/groups', checkSignIn, async (req, res) => {
-    res.redirect('/groups')
-});
-    
-
-
 // Delete Account
 router.post('/drop_user', checkSignIn, async (req, res) => {
     const usernameToDrop = req.body.username; // Accessing the username from the form submission
@@ -222,9 +216,11 @@ router.get('/groups', async (req, res) => {
 
 router.post('/groups', async (req, res) => {
     const names = req.body.userIds;
+    console.log("names: " +names);
 
     const users = await models.User.find({ '_id': { $in: names } });
     users.push(req.session.user);
+    console.log("users: " +users)
 
     try {
         const newGroup = models.Group({
