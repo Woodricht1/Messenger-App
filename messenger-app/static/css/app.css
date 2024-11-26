@@ -11,9 +11,33 @@
      height: 90vh;
      background-color: whitesmoke;
  }
+
+ header {
+    position: absolute;
+    top: 0em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    height: 60px;
+    width: 100%;
+    background-color: skyblue;
+    border-bottom: 4px solid rgb(0, 0, 63); 
+ }
  
- #applogotext {
-     margin-bottom: 20;
+ .headerlogo {
+    margin-left: 20px;
+    margin-right: calc(100vw - 520px);
+    margin-top: 4px;
+ }
+
+ .headerbutton {
+    width: 120px;
+    height: 36px;
+    margin-right: 10px;
+    margin-top: 16px;
+    background-color: rgb(0, 0, 63);
+    color: whitesmoke;
  }
  
  .credentials-block {
@@ -40,7 +64,6 @@
      background-color: skyblue;
      color: rgb(0, 0, 63);
      border: 2px solid white;
-     margin-top: 10
  }
 
   

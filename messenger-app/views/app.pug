@@ -4,10 +4,15 @@ html
         link(rel = "icon", type = "image/png", href = "../messengerapplogo.png")
         link(rel = "stylesheet", type = "text/css", href = "../static/css/app.css")
     body(white-space = "nowrap")
+        header 
+            image(id="applogotext", class="headerlogo", src = "../static/branding/messengerapplogotext.png", alt = "Messanger App Logo", width=240, height=40)
+            form(action = "/settings" method = "GET")
+                button(class="headerbutton", type = "Submit") Settings
+            form(action = "/logout" method = "GET")
+                button(class="headerbutton", type = "Submit") LOG OUT
         div(class = "container")
             span(class="box")
                 div
-                    image(id="applogotext", src = "../static/branding/messengerapplogotext.png", alt = "Messanger App Logo", width=480, height=80)
                     div(class = "credentials-block")
                         div(id = "welcome") Welcome, #{username}.
                             form(action = "/logout" method = "GET")
