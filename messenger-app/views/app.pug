@@ -43,40 +43,31 @@ html
             try {
                 const messageText = $('#message-input').val(); // Get input value
 
-                if (messageText) {
-                console.log('Submitting message...', messageText);
+            if (messageText) {
+            console.log('Submitting message...', messageText);
 
-                // Create and append hidden input to the form
-                const hiddenInput = $('<input>')
-                    .attr('type', 'hidden')
-                    .attr('name', 'messageText')
-                    .attr('value', messageText);
-                $('form#message-writer').append(hiddenInput);
-
-                // Submit the form via AJAX
-                const formData = $(this).serialize(); // Serialize form data
-                $.ajax({
-                    type: 'POST',
-                    url: '/app',
-                    data: formData,
-                    success: function (response) {
-                        console.log('Message submitted successfully:', response);
-                        // Clear the input field for the next message
-                        $('#message-input').val('');
-                    },
-                    error: function (error) {
-                        console.error('Error submitting message:', error);
-                    }
-                });
-
-                hiddenInput.remove();
+            // Submit the form via AJAX
+            $.ajax({
+                type: 'POST',
+                url: '/app',
+                data: {
+                    messageText: messageText,  // Message from input
+                    groupId: currentGroup._id, // Group information
+                },
+                success: function (response) {
+                    console.log('Message submitted successfully:', response);
+                    $('#message-input').val(''); // Clear input field
+                },
+                error: function (error) {
+                    console.error('Error submitting message:', error);
                 }
-            } catch (error) {
-                console.error('Error sending message:', error);
+            });
             }
+            } catch (error) {
+                    console.error('Error sending message:', error);
+                }
             });
         });
                             
-    
     script(src="https://cdn.socket.io/4.5.4/socket.io.min.js")
     script(src="static/js/app.js")

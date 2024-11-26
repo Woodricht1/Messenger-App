@@ -240,8 +240,22 @@ router.get('/app', checkSignIn, async (req, res) => {
 //handle new message sends
 router.post('/app', async (req, res) => {
     try {
-        const messageText = req.body.messageText;
-    console.log('received post', messageText);
+        const {messageText, groupId} = req.body;
+        console.log('received post: ', messageText, "current group ID: ", groupId);
+
+        const newMsg = models.Message({
+            sender: req.session.user,
+            recipient: groupId,
+            message: messageText,
+            timestamp: new Date()
+        });
+
+        await newMsg.save();
+
+        //TODO add message to array of messages in the group
+
+        res.status(200).json({ success: true, message: 'Message sent successfully' });
+        console.log('message saved: ', newMsg)
     } catch (error) {
         console.error(error);
          return res.status(500).json({ error: 'Error sending message.' });
