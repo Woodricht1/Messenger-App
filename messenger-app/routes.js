@@ -243,6 +243,7 @@ router.post('/app', async (req, res) => {
         const {messageText, groupId} = req.body;
         console.log('received post: ', messageText, "current group ID: ", groupId);
 
+        //send new message to DB
         const newMsg = models.Message({
             sender: req.session.user,
             recipient: groupId,
@@ -252,7 +253,12 @@ router.post('/app', async (req, res) => {
 
         await newMsg.save();
 
-        //TODO add message to array of messages in the group
+        //add message to array of messages in the group
+        await models.Group.findByIdAndUpdate(
+            groupId,
+            { $push: {messages: newMsg._id}},
+            {new: true}
+        );
 
         res.status(200).json({ success: true, message: 'Message sent successfully' });
         console.log('message saved: ', newMsg)
