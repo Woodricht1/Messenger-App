@@ -31,6 +31,10 @@ router.get('/email', (req, res) => {
     res.render('email')
 });
 
+router.get('/settings', (req, res) => {
+    res.render('settings')
+})
+
 router.post('/email', async (req, res) => {
     token = req.body.token;
     console.log(token)

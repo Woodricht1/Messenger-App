@@ -11,20 +11,7 @@ html
             form(action = "/logout" method = "GET")
                 button(class="headerbutton", type = "Submit") LOG OUT
         div(class = "container")
-            span(class="box")
-                div
-                    div(class = "credentials-block")
-                        div(id = "welcome") Welcome, #{currentUser.username}.
-                            form(action = "/logout" method = "GET")
-                                button(type = "Submit") LOG OUT
-                            form(action="/drop_user", method="POST")
-                                input(type="hidden", name="username", value=username)
-                                button(type="submit", onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');") Delete Account
-                            form(action = "/edit_username" method = "GET")
-                                button(type = "Submit") Change Username    
-                            form(action = "/edit_password" method = "GET")
-                                button(type = "Submit") Change Password 
-                            
+            span(class="box")  
                 div(class = "credentials-block")
                     h1#groups-container Groups
                     form(action = "/groups" method = "GET")

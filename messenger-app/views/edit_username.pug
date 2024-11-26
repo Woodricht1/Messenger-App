@@ -11,5 +11,7 @@ html
             form(action = "/edit_username" method = "POST")
                 input(name = "username" type = "username" required placeholder = "Username")
                 button(type = "Submit") UPDATE
+            form(action = "/settings" method = "GET")
+                button(type = "Submit") Go Back
             if (message)
                 h4 #{message}
