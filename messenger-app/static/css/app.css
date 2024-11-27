@@ -66,6 +66,27 @@
      border: 2px solid white;
  }
 
+ emoji-picker {
+    position: absolute;
+    right: 0;
+    bottom: 40;
+    width: 400px;
+    height: 300px;
+    --background:whitesmoke;
+    --border-color: skyblue;
+    --border-size: 4px;
+    --border-radius: 0;
+    --input-border-radius: 0px;
+    --input-border-color: skyblue;
+    --input-border-size: 2px;
+    --input-placeholder-color: rgb(75,75,75);
+    --skintone-border-radius: 0;
+ }
+
+ #emojibutton {
+    width: 72;
+ }
+
   
  h1 {
     color: rgb(0, 0, 63);
@@ -134,6 +155,11 @@
     margin-left: 16;
     position: absolute;
     bottom: 20;
+ }
+
+ #message-buttons {
+    display: flex;
+    flex-direction: row;
  }
 
 h5 {
