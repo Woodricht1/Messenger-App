@@ -66,12 +66,34 @@ app.use('/', async (req, res, next) => {
     next()
 })
 
+let MessageStream = models.Message.watch([{ $match: {operationType: {$in: ['insert']}}}])
+
 io.on('connection', (socket) => {
     console.log("A user connected");
 
     socket.on('disconnect', () => {
         console.log('user disconnected')
     });
+
+    socket.on('joinGroup', (groupId) => {
+        socket.join(groupId);
+    });
+
+    MessageStream.on('change',async function(change){ //if messages DB changes, that means a new message has shown up
+
+        //populate details of sender (since this is a nested obejct it is not automatically populated)
+        const senderDetails = await models.User.findById(change.fullDocument.sender).select('username');
+
+        if (senderDetails) {
+            change.fullDocument.sender = {
+                _id: senderDetails._id,
+                username: senderDetails.username
+            };
+        }
+
+        socket.emit('messageStreamChange', change);
+    })
+
 });
 
 const routes = require('./routes.js')

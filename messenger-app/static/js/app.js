@@ -1,6 +1,6 @@
 const socket = io();
 
-async function showGroups() {
+async function renderGroups() {
     //console.log("ShowGroups:")
     try {
         const container = document.getElementById('groups-container');
@@ -14,8 +14,8 @@ async function showGroups() {
             
             groupButton.addEventListener('click', () => {
                 currentGroup = group; // Update the currentGroup
-                console.log(`Current group set to: ${currentGroup.name}`);
-                showChat();
+                //console.log(`Current group set to: ${currentGroup.name}`);
+                renderChat();
             });
 
             container.appendChild(groupDiv);
@@ -25,7 +25,7 @@ async function showGroups() {
     }
 }
 
-async function showChat() {
+async function renderChat() {
     try {
         const container = document.getElementById('chat-container');
         container.innerHTML=`<h1 id="chatheader">${currentGroup.name}</h1>`
@@ -42,6 +42,10 @@ async function showChat() {
         .forEach(msg => {
             const msgDiv = document.createElement('div');
             const timestamp = new Date(msg.timestamp)
+            if (!msg.sender || msg.sender === undefined) {
+                msg.sender = currentGroup.members[0];
+                msg.sender.username = "Unknown"
+            }
             msgDiv.innerHTML = `
                 <p class="messageinfo">${msg.sender.username} • ${timestamp.toLocaleString("en-US")}</p>
                 <p class="message">${msg.message}</p>`;
@@ -51,9 +55,24 @@ async function showChat() {
         script.innerHTML = 'var element = document.getElementById("chat-log"); element.scrollTop = element.scrollHeight;'
         subcontainer.appendChild(script)
         container.appendChild(subcontainer)
+
+        // Join the current group room
+        socket.emit('joinGroup', currentGroup.id);
     } catch (error) {
         console.error('Error loading chat:', error);
     }
+}
+
+function appendMessage(msg) {
+    console.log("appending message")
+    const subcontainer = document.getElementById('chat-log');
+    const msgDiv = document.createElement('div');
+    const timestamp = new Date(msg.timestamp);
+    msgDiv.innerHTML = `
+        <p class="messageinfo">${msg.sender.username} • ${timestamp.toLocaleString("en-US")}</p>
+        <p class="message">${msg.message}</p>`;
+    subcontainer.appendChild(msgDiv);
+    subcontainer.scrollTop = subcontainer.scrollHeight;
 }
 
 async function setUpEmojiPicker() {
@@ -86,6 +105,12 @@ async function setUpEmojiPicker() {
     });
 }
 
+function appInit() {
+    setUpEmojiPicker();
+    renderGroups();
+    renderChat();
+}
+
 async function ensureGlobalChatExists() {
     try {
         const globalChat = await models.Group.findOne({ name: "Global Chat" });
@@ -99,12 +124,19 @@ async function ensureGlobalChatExists() {
     }
 }
 
-function appInit() {
-    setUpEmojiPicker();
-    showGroups();
-    showChat();
-}
-
-
-//TODO add a listener for an update to currentGroup to rerender (if needed)
+// add a listener for new messages so UI updates in real time
 window.addEventListener('load', appInit, true);
+socket.on('messageStreamChange', (change) => {
+    msg = change.fullDocument; //DB change acts as a wrapper over message object
+
+    groups.forEach(group => {
+        if (msg.recipient === group._id) {
+            if(group._id === currentGroup._id) {
+                currentGroup.messages.push(msg);
+                renderChat();
+            } else {
+                group.messages.push(msg);
+            }
+        }
+    })
+})
