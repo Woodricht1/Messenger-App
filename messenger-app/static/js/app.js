@@ -73,7 +73,7 @@ function appendMessage(msg) {
         <p class="messageinfo">${msg.sender.username} • ${timestamp.toLocaleString("en-US")}</p>
         <p class="message">${msg.message}</p>`;
     subcontainer.appendChild(msgDiv);
-    showChat();
+    subcontainer.scrollTop = subcontainer.scrollHeight;
 }
 
 function appInit() {
