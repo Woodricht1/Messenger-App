@@ -289,7 +289,7 @@ router.post('/app', async (req, res) => {
         );
 
         res.status(200).json({ success: true, message: 'Message sent successfully' });
-        console.log('message saved: ', newMsg)
+        console.log('message saved: ', newMsg);
     } catch (error) {
         console.error(error);
          return res.status(500).json({ error: 'Error sending message.' });

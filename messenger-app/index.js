@@ -77,16 +77,6 @@ io.on('connection', (socket) => {
         socket.join(groupId);
     });
 
-    socket.on('sendMessage', (data) => {
-        const { groupId, message } = data;
-        // Add the message to the group's messages
-        // Update your group's messages (this is just an example)
-        let group = groups.find(g => g.id === groupId);
-        group.messages.push(message);
-
-        // Emit the message to all clients in the group
-        io.to(groupId).emit('receiveMessage', message);
-    });
 });
 
 const routes = require('./routes.js')

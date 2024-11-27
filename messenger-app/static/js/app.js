@@ -42,6 +42,10 @@ async function showChat() {
         .forEach(msg => {
             const msgDiv = document.createElement('div');
             const timestamp = new Date(msg.timestamp)
+            if (!msg.sender) {
+                msg.sender = currentGroup.members[0];
+                msg.sender.username = "Unknown"
+            }
             msgDiv.innerHTML = `
                 <p class="messageinfo">${msg.sender.username} • ${timestamp.toLocaleString("en-US")}</p>
                 <p class="message">${msg.message}</p>`;
@@ -54,18 +58,13 @@ async function showChat() {
 
         // Join the current group room
         socket.emit('joinGroup', currentGroup.id);
-
-        // Listen for new messages
-        socket.on('receiveMessage', (msg) => {
-            currentGroup.messages.push(msg); // Update the current group's messages
-            appendMessage(msg); // Append new message to chat
-        });
     } catch (error) {
         console.error('Error loading chat:', error);
     }
 }
 
 function appendMessage(msg) {
+    console.log("appending message")
     const subcontainer = document.getElementById('chat-log');
     const msgDiv = document.createElement('div');
     const timestamp = new Date(msg.timestamp);
