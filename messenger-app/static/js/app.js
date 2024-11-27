@@ -124,16 +124,14 @@ async function ensureGlobalChatExists() {
     }
 }
 
-//TODO add a listener for an update to currentGroup to rerender (if needed)
+// add a listener for an update to currentGroup to rerender
 window.addEventListener('load', appInit, true);
 socket.on('messageChange', (change) => {
-    console.log("messageChange", change);
+    //console.log("messageChange", change);
     msg = change.fullDocument;
+
     groups.forEach(group => {
-        if (msg.recipient === group._id) { //will trigger for all whose currentGroup is where this message was sent to
-            console.log("MSG sent most recently should go in ", group.name);
-            console.log("msg sender", msg.sender);
-            console.log("group id", group._id, " currentgroup id ", currentGroup._id)
+        if (msg.recipient === group._id) {
             if(group._id === currentGroup._id) {
                 currentGroup.messages.push(msg);
                 renderChat();

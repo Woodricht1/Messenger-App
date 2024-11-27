@@ -79,7 +79,17 @@ io.on('connection', (socket) => {
         socket.join(groupId);
     });
 
-    MessageStream.on('change',function(change){
+    MessageStream.on('change',async function(change){
+
+        const senderDetails = await models.User.findById(change.fullDocument.sender).select('username');
+
+        if (senderDetails) {
+            change.fullDocument.sender = {
+                _id: senderDetails._id,
+                username: senderDetails.username
+            };
+        }
+
         socket.emit('messageChange', change);
     })
 
