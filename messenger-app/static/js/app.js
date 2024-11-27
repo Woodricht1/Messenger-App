@@ -14,7 +14,7 @@ async function showGroups() {
             
             groupButton.addEventListener('click', () => {
                 currentGroup = group; // Update the currentGroup
-                console.log(`Current group set to: ${currentGroup.name}`);
+                //console.log(`Current group set to: ${currentGroup.name}`);
                 showChat();
             });
 
@@ -126,3 +126,14 @@ async function ensureGlobalChatExists() {
 
 //TODO add a listener for an update to currentGroup to rerender (if needed)
 window.addEventListener('load', appInit, true);
+socket.on('messageChange', (change) => {
+    //console.log("messageChange", change);
+    msg = change.fullDocument;
+    groups.forEach(group => {
+        if (msg.recipient === group._id) { //will trigger for all whose currentGroup is where this message was sent to
+            console.log("MSG sent most recently should go in ", group.name);
+            currentGroup.messages.push(msg);
+            showChat(); //TODO this doesn't help us because currentGroup.messages is not 
+        }
+    })
+})

@@ -66,6 +66,8 @@ app.use('/', async (req, res, next) => {
     next()
 })
 
+let MessageStream = models.Message.watch([{ $match: {operationType: {$in: ['insert']}}}])
+
 io.on('connection', (socket) => {
     console.log("A user connected");
 
@@ -76,6 +78,10 @@ io.on('connection', (socket) => {
     socket.on('joinGroup', (groupId) => {
         socket.join(groupId);
     });
+
+    MessageStream.on('change',function(change){
+        socket.emit('messageChange', change);
+    })
 
 });
 
