@@ -1,6 +1,6 @@
 const socket = io();
 
-async function showGroups() {
+async function renderGroups() {
     //console.log("ShowGroups:")
     try {
         const container = document.getElementById('groups-container');
@@ -15,7 +15,7 @@ async function showGroups() {
             groupButton.addEventListener('click', () => {
                 currentGroup = group; // Update the currentGroup
                 //console.log(`Current group set to: ${currentGroup.name}`);
-                showChat();
+                renderChat();
             });
 
             container.appendChild(groupDiv);
@@ -25,7 +25,7 @@ async function showGroups() {
     }
 }
 
-async function showChat() {
+async function renderChat() {
     try {
         const container = document.getElementById('chat-container');
         container.innerHTML=`<h1 id="chatheader">${currentGroup.name}</h1>`
@@ -42,7 +42,7 @@ async function showChat() {
         .forEach(msg => {
             const msgDiv = document.createElement('div');
             const timestamp = new Date(msg.timestamp)
-            if (!msg.sender) {
+            if (!msg.sender || msg.sender === undefined) {
                 msg.sender = currentGroup.members[0];
                 msg.sender.username = "Unknown"
             }
@@ -107,8 +107,8 @@ async function setUpEmojiPicker() {
 
 function appInit() {
     setUpEmojiPicker();
-    showGroups();
-    showChat();
+    renderGroups();
+    renderChat();
 }
 
 async function ensureGlobalChatExists() {
@@ -127,13 +127,17 @@ async function ensureGlobalChatExists() {
 //TODO add a listener for an update to currentGroup to rerender (if needed)
 window.addEventListener('load', appInit, true);
 socket.on('messageChange', (change) => {
-    //console.log("messageChange", change);
+    console.log("messageChange", change);
     msg = change.fullDocument;
     groups.forEach(group => {
         if (msg.recipient === group._id) { //will trigger for all whose currentGroup is where this message was sent to
             console.log("MSG sent most recently should go in ", group.name);
-            currentGroup.messages.push(msg);
-            showChat(); //TODO this doesn't help us because currentGroup.messages is not 
+            console.log("msg sender", msg.sender);
+            console.log("group id", group._id, " currentgroup id ", currentGroup._id)
+            if(group._id === currentGroup._id) {
+                currentGroup.messages.push(msg);
+                renderChat();
+            }
         }
     })
 })
