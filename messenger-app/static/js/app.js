@@ -124,11 +124,10 @@ async function ensureGlobalChatExists() {
     }
 }
 
-// add a listener for an update to currentGroup to rerender
+// add a listener for new messages so UI updates in real time
 window.addEventListener('load', appInit, true);
-socket.on('messageChange', (change) => {
-    //console.log("messageChange", change);
-    msg = change.fullDocument;
+socket.on('messageStreamChange', (change) => {
+    msg = change.fullDocument; //DB change acts as a wrapper over message object
 
     groups.forEach(group => {
         if (msg.recipient === group._id) {

@@ -79,8 +79,9 @@ io.on('connection', (socket) => {
         socket.join(groupId);
     });
 
-    MessageStream.on('change',async function(change){
+    MessageStream.on('change',async function(change){ //if messages DB changes, that means a new message has shown up
 
+        //populate details of sender (since this is a nested obejct it is not automatically populated)
         const senderDetails = await models.User.findById(change.fullDocument.sender).select('username');
 
         if (senderDetails) {
@@ -90,7 +91,7 @@ io.on('connection', (socket) => {
             };
         }
 
-        socket.emit('messageChange', change);
+        socket.emit('messageStreamChange', change);
     })
 
 });
