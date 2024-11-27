@@ -21,7 +21,10 @@ html
                     h1#chat-container
                     form#message-writer(action="/app" method="post")
                         input#message-input(autocomplete="off", type="text", placeholder="Type a message...")
-                        button#send-message-button(type="submit") Send
+                        div#message-buttons
+                            button(type="submit") Send
+                            button#emojibutton Emoji
+                        emoji-picker#emoji-picker(class="light")
     script.
         const groups = !{JSON.stringify(groups)}; //this makes it available in app.js as a global var
         var currentGroup = !{JSON.stringify(currentGroup)}; 
@@ -63,4 +66,5 @@ html
         });
                             
     script(src="https://cdn.socket.io/4.5.4/socket.io.min.js")
+    script(type="module", src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")
     script(src="static/js/app.js")

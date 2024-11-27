@@ -76,9 +76,45 @@ function appendMessage(msg) {
     subcontainer.scrollTop = subcontainer.scrollHeight;
 }
 
-function appInit() {
-    showGroups();
-    showChat();
+function appendMessage(msg) {
+    const subcontainer = document.getElementById('chat-log');
+    const msgDiv = document.createElement('div');
+    const timestamp = new Date(msg.timestamp);
+    msgDiv.innerHTML = `
+        <p class="messageinfo">${msg.sender.username} • ${timestamp.toLocaleString("en-US")}</p>
+        <p class="message">${msg.message}</p>`;
+    subcontainer.appendChild(msgDiv);
+    subcontainer.scrollTop = subcontainer.scrollHeight;
+}
+
+async function setUpEmojiPicker() {
+    //hide emoji picker at first
+    var picker = document.getElementById('emoji-picker');
+    picker.style.display = "none";
+
+    document.getElementById('emoji-picker').addEventListener('emoji-click', e => {
+        //insert emoji into input field at cursor position
+        var cursorPos = $('#message-input').prop('selectionStart');
+        var msg = $('#message-input').val();
+        var textBefore = msg.substring(0, cursorPos);
+        var textAfter  = msg.substring(cursorPos, msg.length);
+        $('#message-input').val(textBefore + e.detail.unicode + textAfter);
+    });
+
+    //show or hide emoji picker when button is clicked
+    document.getElementById("emojibutton").addEventListener('click', e => {
+        e.preventDefault();
+        if (picker.style.display === "none") {
+            picker.style.display = "block";
+          } else {
+            picker.style.display = "none";
+          }
+    });
+
+    //when we submit the message, close emoji picker
+    document.getElementById("message-writer").addEventListener('submit', e => {
+        picker.style.display = "none";
+    });
 }
 
 async function ensureGlobalChatExists() {
@@ -93,6 +129,13 @@ async function ensureGlobalChatExists() {
         console.error("Error ensuring Global Chat exists:", error);
     }
 }
+
+function appInit() {
+    setUpEmojiPicker();
+    showGroups();
+    showChat();
+}
+
 
 //TODO add a listener for an update to currentGroup to rerender (if needed)
 window.addEventListener('load', appInit, true);
