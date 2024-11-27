@@ -135,6 +135,8 @@ socket.on('messageChange', (change) => {
             if(group._id === currentGroup._id) {
                 currentGroup.messages.push(msg);
                 renderChat();
+            } else {
+                group.messages.push(msg);
             }
         }
     })
