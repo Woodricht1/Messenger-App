@@ -51,9 +51,29 @@ async function showChat() {
         script.innerHTML = 'var element = document.getElementById("chat-log"); element.scrollTop = element.scrollHeight;'
         subcontainer.appendChild(script)
         container.appendChild(subcontainer)
+
+        // Join the current group room
+        socket.emit('joinGroup', currentGroup.id);
+
+        // Listen for new messages
+        socket.on('receiveMessage', (msg) => {
+            currentGroup.messages.push(msg); // Update the current group's messages
+            appendMessage(msg); // Append new message to chat
+        });
     } catch (error) {
         console.error('Error loading chat:', error);
     }
+}
+
+function appendMessage(msg) {
+    const subcontainer = document.getElementById('chat-log');
+    const msgDiv = document.createElement('div');
+    const timestamp = new Date(msg.timestamp);
+    msgDiv.innerHTML = `
+        <p class="messageinfo">${msg.sender.username} • ${timestamp.toLocaleString("en-US")}</p>
+        <p class="message">${msg.message}</p>`;
+    subcontainer.appendChild(msgDiv);
+    showChat();
 }
 
 function appInit() {
