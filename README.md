@@ -22,6 +22,8 @@ Messanger App is a web-based messaging application created as a University of Da
 
 Our app is called Messanger App because we made a typo when initializing the database and decided not to change it. But it also announces our greater purpose: to be a respite from the angry, hyperbolic, clickbait world of social media.
 
+It's hosted on Heroku here: [Messanger App](https://messangerapp-8359bf63609e.herokuapp.com/)
+
 ### Task Management
 
 Our work was tracked on our [Trello board](https://trello.com/b/PrgpVolO).
